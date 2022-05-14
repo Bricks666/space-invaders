@@ -13,11 +13,11 @@ SPRITE_SIZE = 48
 
 
 class BulletType(Enum):
-    HERO = 0
+    HERO = -1
     ENEMY = 1
 
 
-FIRE_COOLDOWN = 1
+FIRE_COOLDOWN = 5
 
 WIDTH: int = 12 * SPRITE_SIZE
 HEIGHT: int = 5 * SPRITE_SIZE

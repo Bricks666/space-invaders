@@ -33,7 +33,6 @@ class Hero(pygame.sprite.Sprite):
     def __fire(self):
         current_time = time()
         if self.__last_fire + FIRE_COOLDOWN <= current_time:
-            print("fire")
-            start_x = self.rect.x + SPRITE_SIZE / 2
-            HeroBullet(start_x, self.rect.y)
+            start_x = self.rect.centerx
+            HeroBullet(start_x, self.rect.y, self.groups()[0])
             self.__last_fire = current_time

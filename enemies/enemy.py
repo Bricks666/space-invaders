@@ -1,4 +1,5 @@
 import pygame
+from enemies.bullet import HeroBullet
 from utils.sprite_loader import SpriteLoader
 from consts.main import SPRITE_SIZE, STEP, WIDTH, Direction
 
@@ -35,3 +36,7 @@ class Enemy(pygame.sprite.Sprite):
 
     def __down(self):
         self.rect.y += STEP
+
+    def shot(self):
+        start_x = self.rect.centerx
+        HeroBullet(start_x, self.rect.y, self.groups()[0])
