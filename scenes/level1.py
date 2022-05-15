@@ -8,19 +8,31 @@ from utils.generate_level import generate_level
 
 class Level1(Scene):
     def __init__(self, screen: pygame.Surface):
-        all_sprites, enemies = generate_level(1)
-        self._enemies = enemies
-        self.__last_enemy_fire_time = 0
-        super().__init__(screen, all_sprites)
+        self.__last_enemy_fire_time__: float = 0
+        super().__init__(screen)
 
     def update(self):
-        current_time = time()
-        if self.__last_enemy_fire_time + FIRE_COOLDOWN <= current_time:
-            self.__fire_enemy()
-            self.__last_enemy_fire_time = current_time
+        is_end = self.__check_end__()
+        if is_end:
+            return
+        self.__fire_enemy__()
         super().update()
 
-    def __fire_enemy(self):
-        enemies = self._enemies.sprites()
-        shoter = randint(0, len(enemies) - 1)
-        enemies[shoter].shot()
+    def select(self):
+        _, enemies, players = generate_level(1)
+        self._enemies_ = enemies
+        self._players_ = players
+
+    def unselect(self):
+        return super().unselect()
+
+    def __fire_enemy__(self):
+        current_time = time()
+        if self.__last_enemy_fire_time__ + FIRE_COOLDOWN <= current_time:
+            enemies = self._enemies_.sprites()
+            shoter = randint(0, len(enemies) - 1)
+            enemies[shoter].fire()
+            self.__last_enemy_fire_time__ = current_time
+
+    def __check_end__(self) -> bool:
+        return not len(self._enemies_) or not len(self._players_)

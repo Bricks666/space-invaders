@@ -9,7 +9,7 @@ class Direction(Enum):
     BOTTOM = 1
 
 
-SPRITE_SIZE = 48
+SPRITE_SIZE: int = 32
 
 
 class BulletType(Enum):
@@ -17,15 +17,17 @@ class BulletType(Enum):
     ENEMY = 1
 
 
-FIRE_COOLDOWN = 5
+FIRE_COOLDOWN: float = 0.5
 
 WIDTH: int = 12 * SPRITE_SIZE
-HEIGHT: int = 5 * SPRITE_SIZE
+HEIGHT: int = 14 * SPRITE_SIZE
 FPS: int = 12
 RUNNING: bool = False
 
-STEP = 2
 
 class Entities(Enum):
-  HERO = "0"
-  ENEMY = "1"
+    HERO = "0"
+    ENEMY = "1"
+
+
+STEP: float = 3.5

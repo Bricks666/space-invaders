@@ -11,8 +11,6 @@ def controll_events():
                 RUNNING = False
 
 
-
-
 def main():
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -28,8 +26,6 @@ def main():
         controll_events()
         pygame.display.update()
         clock.tick(FPS)
-
-
 
 
 if __name__ == "__main__":
