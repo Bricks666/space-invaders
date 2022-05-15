@@ -25,12 +25,12 @@ LEVEL_WIDTH: int = 12 * SPRITE_SIZE
 LEVEL_HEIGHT: int = 14 * SPRITE_SIZE
 
 SCREEN_MARGIN: int = 50
-ASIDE_BAR_WIDTH: int = 150
+ASIDE_BAR_WIDTH: int = SPRITE_SIZE * 3 + 12
 
 WIDTH: int = LEVEL_WIDTH + ASIDE_BAR_WIDTH + SCREEN_MARGIN * 2
 HEIGHT: int = LEVEL_HEIGHT + SCREEN_MARGIN * 2
-FPS: int = 30
-RUNNING: bool = False
+FPS: int = 60
+BORDER_WIDTH: int = 5
 
 
 class Entities(Enum):
@@ -38,4 +38,4 @@ class Entities(Enum):
     ENEMY = "1"
 
 
-STEP: float = SPRITE_SIZE * 0.15
+STEP = 4

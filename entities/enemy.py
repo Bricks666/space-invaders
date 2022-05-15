@@ -1,21 +1,27 @@
 from time import time
+from typing import Dict
 import pygame
 from entities.bullet import Bullet
 from entities.collidable import Collidable
+from stores.main import inject
+from stores.scores import Scores, scores
 from utils.loaders import sprite_loader
 from consts.main import LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, BulletType,  Direction
 
 
+@inject(scores, "__scores__")
 class Enemy(Collidable):
+    __injected__: Dict
+    __scores__: Scores
     IMAGE: pygame.Surface = sprite_loader.load("enemy.png")
     BULLET: pygame.Surface = sprite_loader.load("enemy_bullet.png")
     DURATION: float = 0.5
     DESTROY: pygame.mixer.Sound
 
-    def __init__(self, x: float, y: float, number: int, total_count: int):
+    def __init__(self, x: float, y: float, number: int, total_count: int, scores: int = 50):
         super().__init__()
         self.image = pygame.transform.scale(
-            Enemy.IMAGE, (SPRITE_SIZE * 0.8, SPRITE_SIZE * 0.8))
+            Enemy.IMAGE, (SPRITE_SIZE * 0.7, SPRITE_SIZE * 0.7))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -24,6 +30,8 @@ class Enemy(Collidable):
         self.__direction__ = Direction.LEFT
         self.__end__ = False
         self.__last_move__ = time()
+        self.__score__ = scores
+        self.__scores__ = self.__injected__.get("__scores__")
 
     def update(self) -> None:
         is_collided = self.__collide__()
@@ -62,6 +70,7 @@ class Enemy(Collidable):
 
     def kill(self) -> None:
         Enemy.DESTROY.play()
+        self.__scores__.add(self.__score__)
         return super().kill()
 
 

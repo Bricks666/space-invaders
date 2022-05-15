@@ -1,9 +1,10 @@
 import pygame
 from consts.main import BULLET_SIZE, LEVEL_HEIGHT, SCREEN_MARGIN, SPRITE_SIZE, STEP, BulletType
 from entities.collidable import Collidable
+from entities.sprite import Sprite
 
 
-class Bullet(Collidable):
+class Bullet(Collidable, Sprite):
     SHOOT: pygame.mixer.Sound
 
     def __init__(self, image: pygame.Surface, x: float, y: float, type: BulletType, *group):
@@ -21,7 +22,6 @@ class Bullet(Collidable):
 
         if self.__is_out_of_screen__():
             self.kill()
-            print("kill")
             return
         self.rect.y += STEP * 4 * self.__type__.value
 

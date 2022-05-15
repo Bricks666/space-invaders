@@ -38,6 +38,15 @@ class LevelLoader(Loader):
             return [line.strip() for line in level]
 
 
+class FontLoader(Loader):
+    def __init__(self):
+        super().__init__("./assets/fonts/")
+
+    def load(self, font: str, size: int = 18) -> pygame.font.Font:
+        return pygame.font.Font(self.__path__ + font, size)
+
+
 sprite_loader = SpriteLoader()
 sound_loader = SoundLoader()
 level_loader = LevelLoader()
+font_loader = FontLoader()

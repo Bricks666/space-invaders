@@ -7,7 +7,7 @@ from utils.loaders import level_loader
 
 
 def generate_level(level: int) -> Tuple[pygame.sprite.Group, pygame.sprite.Group]:
-    sprites = level_loader.load(f'level{level}.txt')
+    sprites = level_loader.load(f'{level}.txt')
     all_sprites = pygame.sprite.Group()
     enemies = pygame.sprite.Group()
     players = pygame.sprite.Group()
