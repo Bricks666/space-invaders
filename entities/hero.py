@@ -55,8 +55,6 @@ class Hero(Collidable):
     def __move__(self, direction: Direction) -> None:
         if self.__can_move__(direction):
             self.rect.x += STEP * direction.value
-            return
-        print("stop")
 
     def __can_move__(self, direction: Direction) -> bool:
         match direction:

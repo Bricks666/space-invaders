@@ -30,7 +30,7 @@ class UsersTable(Table):
         sql = (f"INSERT INTO {self.NAME}"+
              "(login, password)", "VALUES"+
              "(%(login)s, %(password)s)")
-        self._transaction(sql, data=user)
+        self._transaction_(sql, data=user)
 
     def get_user(self, login: str, password: str) -> List[UserModel]:
         sql= (
@@ -38,4 +38,4 @@ class UsersTable(Table):
             f"WHERE login = '{login}' AND password = '{password}'"
         )
 
-        return self._transaction(sql)
+        return self._transaction_(sql)

@@ -22,8 +22,6 @@ class Aside(pygame.sprite.Sprite):
         self.__background__ = pygame.Color(0, 0, 0)
         self.__scores__ = self.__injected__.get("__scores__")
         self.__lives__ = self.__injected__.get("__lives__")
-        self.__max_scores__ = Text()
-        self.__current_scores__ = Text()
         self.__margin__ = SPRITE_SIZE / 2
 
     def draw(self):
@@ -33,24 +31,33 @@ class Aside(pygame.sprite.Sprite):
         self.__draw__lives__()
 
     def __draw_max_score__(self):
-        max_score = str(self.__scores__.get_max_scores()) + " POINTS"
-        max_scores_text = self.__max_scores__.generate(
+        label = Text.generate("Max score:")
+        max_score = f"{self.__scores__.get_max_scores()} POINTS"
+        max_scores_text = Text.generate(
             max_score)
-        rect = max_scores_text.get_rect()
-        rect.x = self.rect.x + self.__margin__
-        rect.y = SPRITE_SIZE * 2 + 24
-        rect.centerx = self.rect.centerx
-        self.__screen__.blit(max_scores_text, rect)
+        label_rect = label.get_rect()
+        label_rect.centerx = self.rect.centerx
+        label_rect.x = self.rect.x + self.__margin__
+        label_rect.y = SPRITE_SIZE * 1.5 + 24
+        score_rect = max_scores_text.get_rect()
+        score_rect.x = self.rect.x + self.__margin__
+        score_rect.y = SPRITE_SIZE * 2 + 24
+        self.__screen__.blit(label, label_rect)
+        self.__screen__.blit(max_scores_text, score_rect)
 
     def __draw_current_score__(self):
-        current_score = str(self.__scores__.get_scores()) + " POINTS"
-        current_scores_text = self.__current_scores__.generate(
+        label = Text.generate("Current score:")
+        current_score = f"{self.__scores__.get_scores()} POINTS"
+        current_scores_text = Text.generate(
             current_score)
-        rect = current_scores_text.get_rect()
-        rect.x = self.rect.x + self.__margin__
-        rect.y = SPRITE_SIZE + 24
-        rect.centerx = self.rect.centerx
-        self.__screen__.blit(current_scores_text, rect)
+        label_rect = label.get_rect()
+        label_rect.x = self.rect.x + self.__margin__
+        label_rect.y = SPRITE_SIZE * 0.5 + 24
+        score_rect = current_scores_text.get_rect()
+        score_rect.x = self.rect.x + self.__margin__
+        score_rect.y = SPRITE_SIZE + 24
+        self.__screen__.blit(label, label_rect)
+        self.__screen__.blit(current_scores_text, score_rect)
 
     def __draw__lives__(self):
         for i in range(self.__lives__.get_lives()):

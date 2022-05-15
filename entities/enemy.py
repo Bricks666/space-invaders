@@ -65,7 +65,7 @@ class Enemy(Collidable):
         return super().__collide__()
 
     def fire(self) -> None:
-        EnemyBullet(Enemy.BULLET, self.rect.centerx, self.rect.y,
+        EnemyBullet(Enemy.BULLET, self.rect.centerx, self.rect.y + self.rect.height,
                     self.groups()[0])
 
     def kill(self) -> None:

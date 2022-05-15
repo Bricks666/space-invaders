@@ -1,5 +1,4 @@
 from abc import ABCMeta, abstractmethod
-from http.client import PAYMENT_REQUIRED
 from typing import List
 import pygame
 

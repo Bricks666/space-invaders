@@ -1,24 +1,37 @@
 from random import randint
 from time import time
+from typing import Dict
 import pygame
-from consts.main import BORDER_WIDTH, FIRE_COOLDOWN, HEIGHT, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN
+from consts.main import BORDER_WIDTH, FIRE_COOLDOWN, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
+from entities.text import Text
 from scenes.scene import Scene
+from stores.lives import Lives, lives
+from stores.main import inject
+from stores.scores import Scores, scores
 
 
+@inject(lives, "__lives__")
+@inject(scores, "__scores__")
 class Level(Scene):
-    def __init__(self, screen: pygame.Surface, all_sprites: pygame.sprite.Group, enemies: pygame.sprite.Group, players: pygame.sprite.Group):
-        super().__init__(screen)
+    __injected__: Dict
+    __lives__: Lives
+    __scores__: Scores
+
+    def __init__(self, screen: pygame.Surface, all_sprites: pygame.sprite.Group, enemies: pygame.sprite.Group):
+        super().__init__(screen, all_sprites)
         self.__last_enemy_fire_time__: float = time()
-        self.__all_sprites__ = all_sprites
         self.__enemies__ = enemies
-        self.__players__ = players
+        self.__lives__ = self.__injected__.get("__lives__")
+        self.__scores__ = self.__injected__.get("__scores__")
 
     def update(self):
-        is_end = self.__check_end__()
-        if is_end:
-            return
-        self.__fire_enemy__()
-        super().update()
+        if self.__check_lose():
+            self.__end__("Game over")
+        elif self.__check_win__():
+            self.__end__("You win")
+        else:
+            self.__fire_enemy__()
+            super().update()
 
     def draw(self):
         self.__draw_border__()
@@ -32,8 +45,23 @@ class Level(Scene):
             enemies[shoter].fire()
             self.__last_enemy_fire_time__ = current_time
 
-    def __check_end__(self) -> bool:
-        return not len(self.__enemies__) or not len(self.__players__)
+    def __check_win__(self) -> bool:
+        return not len(self.__enemies__)
+
+    def __check_lose(self) -> bool:
+        return not self.__lives__.get_lives()
+
+    def __end__(self, phrase: str):
+        self.__all_sprites__.empty()
+        self.__draw_end__(phrase)
+
+    def __draw_end__(self, phase: str):
+        phrase_text = Text.generate(phase)
+        rect = phrase_text.get_rect()
+        rect.center = self._screen_.get_rect().center
+        rect.centerx = LEVEL_WIDTH / 2 + SCREEN_MARGIN
+        rect.y -= SPRITE_SIZE
+        self._screen_.blit(phrase_text, rect)
 
     def __draw_border__(self):
         color = pygame.Color(250, 250, 250)
