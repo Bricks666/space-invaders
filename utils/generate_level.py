@@ -1,14 +1,13 @@
 from typing import List, Tuple
 import pygame
-from consts.main import SPRITE_SIZE,  Entities
+from consts.main import SCREEN_MARGIN, SPRITE_SIZE,  Entities
 from entities.hero import Hero
 from entities.enemy import Enemy
-from entities.sprite import Sprite
-from utils.load_level import load_level
+from utils.loaders import level_loader
 
 
 def generate_level(level: int) -> Tuple[pygame.sprite.Group, pygame.sprite.Group]:
-    sprites = load_level(level)
+    sprites = level_loader.load(f'level{level}.txt')
     all_sprites = pygame.sprite.Group()
     enemies = pygame.sprite.Group()
     players = pygame.sprite.Group()
@@ -16,7 +15,8 @@ def generate_level(level: int) -> Tuple[pygame.sprite.Group, pygame.sprite.Group
         enemies_count = 0
         total_enemies_count = sprites[y].count(Entities.ENEMY.value)
         for x in range(len(sprites[y])):
-            position = (x * SPRITE_SIZE, y * SPRITE_SIZE)
+            position = (x * SPRITE_SIZE + SCREEN_MARGIN,
+                        y * SPRITE_SIZE + SCREEN_MARGIN)
             match sprites[y][x]:
                 case Entities.ENEMY.value:
                     enemy = Enemy(*position, enemies_count,

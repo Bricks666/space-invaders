@@ -1,15 +1,16 @@
 from time import time
 import pygame
-from consts.main import FIRE_COOLDOWN, SPRITE_SIZE, STEP, BulletType,  Direction
+from consts.main import FIRE_COOLDOWN,  LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, STEP, BulletType,  Direction
 from entities.bullet import Bullet
 from entities.collidable import Collidable
 
-from utils.sprite_loader import SpriteLoader
+from utils.loaders import sprite_loader
 
 
 class Hero(Collidable):
-    IMAGE: pygame.Surface = SpriteLoader.load("hero.png")
-    BULLET: pygame.Surface = SpriteLoader.load("hero_bullet.png")
+    IMAGE: pygame.Surface = sprite_loader.load("hero.png")
+    BULLET: pygame.Surface = sprite_loader.load("hero_bullet.png")
+    KILL_SOUND: pygame.mixer.Sound
 
     def __init__(self, x: float, y: float):
         super().__init__()
@@ -32,8 +33,16 @@ class Hero(Collidable):
         if pressed_keys[pygame.K_SPACE]:
             self.__fire__()
 
-    def __move__(self, direction: Direction):
-        self.rect.x += STEP * direction.value
+    def __move__(self, direction: Direction) -> None:
+        if self.__can_move__(direction):
+            self.rect.x += STEP * direction.value
+
+    def __can_move__(self, direction: Direction) -> bool:
+        match direction:
+            case Direction.LEFT:
+                return self.rect.x > SCREEN_MARGIN
+            case Direction.RIGHT:
+                return self.rect.x < LEVEL_WIDTH + SCREEN_MARGIN
 
     def __collide__(self) -> bool:
         return super().__collide__()
@@ -41,9 +50,13 @@ class Hero(Collidable):
     def __fire__(self):
         current_time = time()
         if self.__last_fire__ + FIRE_COOLDOWN <= current_time:
-            HeroBullet(Hero.BULLET, self.rect.x, self.rect.y,
+            HeroBullet(Hero.BULLET, self.rect.centerx, self.rect.y,
                        self.groups()[0])
             self.__last_fire__ = current_time
+
+    def kill(self) -> None:
+        Hero.KILL_SOUND.play()
+        return super().kill()
 
 
 class HeroBullet(Bullet):

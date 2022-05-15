@@ -1,5 +1,6 @@
 
 from enum import Enum
+from typing import Tuple
 
 
 class Direction(Enum):
@@ -9,7 +10,8 @@ class Direction(Enum):
     BOTTOM = 1
 
 
-SPRITE_SIZE: int = 32
+SPRITE_SIZE: int = 64
+BULLET_SIZE: Tuple[int, int] = (SPRITE_SIZE / 100 * 7, SPRITE_SIZE / 100 * 52)
 
 
 class BulletType(Enum):
@@ -17,11 +19,17 @@ class BulletType(Enum):
     ENEMY = 1
 
 
-FIRE_COOLDOWN: float = 0.5
+FIRE_COOLDOWN: float = 1
 
-WIDTH: int = 12 * SPRITE_SIZE
-HEIGHT: int = 14 * SPRITE_SIZE
-FPS: int = 12
+LEVEL_WIDTH: int = 12 * SPRITE_SIZE
+LEVEL_HEIGHT: int = 14 * SPRITE_SIZE
+
+SCREEN_MARGIN: int = 50
+ASIDE_BAR_WIDTH: int = 150
+
+WIDTH: int = LEVEL_WIDTH + ASIDE_BAR_WIDTH + SCREEN_MARGIN * 2
+HEIGHT: int = LEVEL_HEIGHT + SCREEN_MARGIN * 2
+FPS: int = 30
 RUNNING: bool = False
 
 
@@ -30,4 +38,4 @@ class Entities(Enum):
     ENEMY = "1"
 
 
-STEP: float = 3.5
+STEP: float = SPRITE_SIZE * 0.15

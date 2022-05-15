@@ -6,10 +6,11 @@ from scenes.scene import Scene
 from utils.generate_level import generate_level
 
 
-class Level1(Scene):
-    def __init__(self, screen: pygame.Surface):
-        self.__last_enemy_fire_time__: float = 0
+class Level(Scene):
+    def __init__(self, screen: pygame.Surface, level: int):
         super().__init__(screen)
+        self.__last_enemy_fire_time__: float = time()
+        self.__level__ = level
 
     def update(self):
         is_end = self.__check_end__()
@@ -19,7 +20,7 @@ class Level1(Scene):
         super().update()
 
     def select(self):
-        _, enemies, players = generate_level(1)
+        _, enemies, players = generate_level(self.__level__)
         self._enemies_ = enemies
         self._players_ = players
 
