@@ -3,16 +3,16 @@ from typing import Dict
 import pygame
 from entities.bullet import Bullet
 from entities.collidable import Collidable
-from stores.main import inject
-from stores.scores import Scores, scores
+from packages.inject import Inject
+from stores.scores import ScoresStore
 from utils.loaders import sprite_loader
 from consts.main import LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, BulletType,  Direction
 
 
-@inject(scores, "__scores__")
+@Inject(ScoresStore, "__scores__")
 class Enemy(Collidable):
     __injected__: Dict
-    __scores__: Scores
+    __scores__: ScoresStore
     IMAGE: pygame.Surface = sprite_loader.load("enemy.png")
     BULLET: pygame.Surface = sprite_loader.load("enemy_bullet.png")
     DURATION: float = 0.5

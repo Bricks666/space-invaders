@@ -4,16 +4,16 @@ import pygame
 from consts.main import FIRE_COOLDOWN,  LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, STEP, BulletType,  Direction
 from entities.bullet import Bullet
 from entities.collidable import Collidable
-from stores.lives import Lives, lives
-from stores.main import inject
+from stores.lives import LivesStore
+from packages.inject import Inject
 
 from utils.loaders import sprite_loader
 
 
-@inject(lives, "__lives__")
+@Inject(LivesStore, "__lives__")
 class Hero(Collidable):
     __injected__: Dict
-    __lives__: Lives
+    __lives__: LivesStore
     IMAGE: pygame.Surface = sprite_loader.load("hero.png")
     BULLET: pygame.Surface = sprite_loader.load("hero_bullet.png")
     KILL_SOUND: pygame.mixer.Sound

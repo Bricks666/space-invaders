@@ -1,10 +1,11 @@
-class Scores:
-    def __init__(self):
-        self.__max_scores__ = 0
-        self.__value__ = 0
+from packages.inject import Injectable
 
-    def init(self, max_scores: int):
-        self.__max_scores__ = max_scores
+
+@Injectable()
+class ScoresStore:
+    def __init__(self, max_score: int = 0):
+        self.__max_scores__ = max_score
+        self.__value__ = 0
 
     def add(self, value: int) -> None:
         self.__value__ += value
@@ -18,6 +19,3 @@ class Scores:
     def reset_score(self) -> None:
         self.__max_scores__ = max(self.__max_scores__, self.__value__)
         self.__value__ = 0
-
-
-scores = Scores()

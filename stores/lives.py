@@ -1,4 +1,9 @@
-class Lives:
+
+from packages.inject import Injectable
+
+
+@Injectable()
+class LivesStore:
     __START__ = 3
 
     def __init__(self):
@@ -12,6 +17,3 @@ class Lives:
 
     def reset(self):
         self.__lives__ = self.__START__
-
-
-lives = Lives()
