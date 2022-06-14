@@ -4,27 +4,27 @@ import pygame
 from consts.main import FPS
 from scenes.levels_machine import LevelsMachine
 from entities.aside import Aside
-from stores.level import LevelStore, Levels, levels
-from stores.lives import Lives, lives
-from stores.main import inject
-from stores.scores import Scores, scores
+from stores.level import LevelStore, Levels
+from stores.lives import LivesStore
+from packages.inject import Inject
+from stores.scores import ScoresStore
 from utils.load_font import load_font
 from utils.load_music import load_music
-from database.db import DB, db
+from database.db import DB
 
 
-@inject(levels, "__levels__")
-@inject(scores, "__scores__")
-@inject(lives, "__lives__")
-@inject(db, "__db__")
+@Inject(LevelStore, "__levels__")
+@Inject(ScoresStore, "__scores__")
+@Inject(LivesStore, "__lives__")
+@Inject(DB, "__db__")
 class Game:
     __injected__: Dict
     __levels__: LevelStore
-    __scores__: Scores
-    __lives__: Lives
+    __scores__: ScoresStore
+    __lives__: LivesStore
     __db__: DB
 
-    def __init__(self, screen: pygame.Surface):
+    def __init__(self, screen: pygame.Surface) -> None:
         self.__screen__ = screen
         self.__levels_machine__ = LevelsMachine(screen)
         self.__aside__ = Aside(screen)
@@ -42,37 +42,40 @@ class Game:
             self.__levels_machine__.update()
             self.__levels_machine__.draw()
             self.__aside__.draw()
-            self.__controll_events__()
+            self.__control_events__()
             pygame.display.update()
             self.__clock__.tick(FPS)
 
-    def init(self):
+    def init(self) -> None:
         pygame.display.set_caption("Space invaders")
         pygame.mixer.init()
         pygame.font.init()
         load_music()
         load_font()
-        self.__levels_machine__.change_level(self.__levels__.get_level())
+        self.__set_level__()
 
-    def restart(self):
+    def restart(self) -> None:
         self.__running__ = False
         self.__save_score__()
-        self.__screen__.fill((0, 0, 0))
         self.__lives__.reset()
-        self.init()
+        self.__set_level__()
         self.start()
 
-    def quite(self):
+    def quite(self) -> None:
         self.__save_score__()
+        self.__db__.disconnect()
         pygame.quit()
         sys.exit(0)
 
-    def __save_score__(self):
+    def __set_level__(self) -> None:
+        self.__levels_machine__.change_level(self.__levels__.get_level())
+
+    def __save_score__(self) -> None:
         score = self.__scores__.get_scores()
         self.__db__.scores_table.add_score(score)
         self.__scores__.reset_score()
 
-    def __controll_events__(self):
+    def __control_events__(self) -> None:
         for event in pygame.event.get():
             match event.type:
                 case pygame.QUIT:
@@ -80,8 +83,10 @@ class Game:
                 case pygame.KEYDOWN:
                     keys = pygame.key.get_pressed()
                     if keys[pygame.K_1]:
-                        self.__levels_machine__.change_level(Levels.LEVEL1)
+                        self.__levels__.set_level(Levels.LEVEL1)
+                        self.restart()
                     if keys[pygame.K_2]:
-                        self.__levels_machine__.change_level(Levels.LEVEL2)
+                        self.__levels__.set_level(Levels.LEVEL2)
+                        self.restart()
                     if keys[pygame.K_r]:
                         self.restart()

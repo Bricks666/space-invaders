@@ -1,10 +1,12 @@
 from sqlite3 import connect
 import sqlite3
 from database.scores import ScoresTable
+from packages.inject import Injectable
 
 
+@Injectable()
 class DB:
-    def __init__(self, name="space-invaders"):
+    def __init__(self, name="space-invaders") -> None:
         self.__name__ = name
 
     def init(self) -> None:

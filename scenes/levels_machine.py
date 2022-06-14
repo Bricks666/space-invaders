@@ -2,12 +2,12 @@ from typing import Dict, Optional
 import pygame
 from scenes.level import Level
 from stores.level import Levels
-from stores.main import inject
-from stores.level import levels, LevelStore
+from packages.inject import Inject
+from stores.level import LevelStore
 from utils.generate_level import generate_level
 
 
-@inject(levels, "__levels__")
+@Inject(LevelStore, "__levels__")
 class LevelsMachine:
     START: pygame.mixer.Sound
     __injected__: Dict

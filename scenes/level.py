@@ -5,17 +5,17 @@ import pygame
 from consts.main import BORDER_WIDTH, FIRE_COOLDOWN, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
 from entities.text import Text
 from scenes.scene import Scene
-from stores.lives import Lives, lives
-from stores.main import inject
-from stores.scores import Scores, scores
+from stores.lives import LivesStore
+from packages.inject import Inject
+from stores.scores import ScoresStore
 
 
-@inject(lives, "__lives__")
-@inject(scores, "__scores__")
+@Inject(LivesStore, "__lives__")
+@Inject(ScoresStore, "__scores__")
 class Level(Scene):
     __injected__: Dict
-    __lives__: Lives
-    __scores__: Scores
+    __lives__: LivesStore
+    __scores__: ScoresStore
 
     def __init__(self, screen: pygame.Surface, all_sprites: pygame.sprite.Group, enemies: pygame.sprite.Group):
         super().__init__(screen, all_sprites)
