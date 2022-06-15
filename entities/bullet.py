@@ -1,10 +1,9 @@
 import pygame
 from consts.main import BULLET_SIZE, LEVEL_HEIGHT, SCREEN_MARGIN, SPRITE_SIZE, STEP, BulletType
 from entities.collidable import Collidable
-from entities.sprite import Sprite
 
 
-class Bullet(Collidable, Sprite):
+class Bullet(Collidable):
     SHOOT: pygame.mixer.Sound
 
     def __init__(self, image: pygame.Surface, x: float, y: float, type: BulletType, *group):

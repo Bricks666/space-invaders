@@ -1,19 +1,27 @@
-from typing import Dict, List, TypeVar
+from abc import ABCMeta, abstractmethod
+from typing import List, Optional, Tuple, TypeVar
 import sqlite3
 
-T = TypeVar("T", bound=object | None)
+R = TypeVar("R", bound=Optional[object])
+T = TypeVar("T", bound=Tuple)
 
 
-class Table:
-    NAME: str
+class Table(metaclass=ABCMeta):
+    __name__: str
 
-    def __init__(self, connection: sqlite3.Connection, initSQL: str):
+    def __init__(self, connection: sqlite3.Connection, fields: str, name: str):
+        self.__name__ = name
         self.__connection__ = connection
+        initSQL = f"CREATE TABLE IF NOT EXISTS {self.__name__}(" + fields + ");"
         self._transaction_(initSQL)
 
-    def _transaction_(self, sql: str, data: Dict = {}) -> List[T]:
+    def _transaction_(self, sql: str) -> List[R]:
         cursor = self.__connection__.cursor()
-        cursor.execute(sql, data)
+        cursor.execute(sql)
         response = cursor.fetchall()
         self.__connection__.commit()
-        return list(response)
+        return [self.__converter__(data) for data in response]
+
+    @abstractmethod
+    def __converter__(self, data: T) -> R:
+        pass

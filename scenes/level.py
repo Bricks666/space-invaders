@@ -3,7 +3,9 @@ from time import time
 from typing import Dict
 import pygame
 from consts.main import BORDER_WIDTH, FIRE_COOLDOWN, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
+from entities.enemy import Enemy
 from entities.text import Text
+from packages.sprites import get_all_sprites, get_all_sprites_by_class
 from scenes.scene import Scene
 from stores.lives import LivesStore
 from packages.inject import Inject
@@ -13,19 +15,19 @@ from stores.scores import ScoresStore
 @Inject(LivesStore, "__lives__")
 @Inject(ScoresStore, "__scores__")
 class Level(Scene):
-    __injected__: Dict
+    __injected__: Dict[str, object]
     __lives__: LivesStore
     __scores__: ScoresStore
 
-    def __init__(self, screen: pygame.Surface, all_sprites: pygame.sprite.Group, enemies: pygame.sprite.Group):
-        super().__init__(screen, all_sprites)
+    def __init__(self, screen: pygame.Surface):
+        super().__init__(screen, get_all_sprites())
         self.__last_enemy_fire_time__: float = time()
-        self.__enemies__ = enemies
+        self.__enemies__ = get_all_sprites_by_class(Enemy)
         self.__lives__ = self.__injected__.get("__lives__")
         self.__scores__ = self.__injected__.get("__scores__")
 
     def update(self):
-        if self.__check_lose():
+        if self.__check_lose__():
             self.__end__("Game over")
         elif self.__check_win__():
             self.__end__("You win")
@@ -41,14 +43,14 @@ class Level(Scene):
         current_time = time()
         if self.__last_enemy_fire_time__ + FIRE_COOLDOWN <= current_time:
             enemies = self.__enemies__.sprites()
-            shoter = randint(0, len(enemies) - 1)
-            enemies[shoter].fire()
+            shooter = randint(0, len(enemies) - 1)
+            enemies[shooter].fire()
             self.__last_enemy_fire_time__ = current_time
 
     def __check_win__(self) -> bool:
         return not len(self.__enemies__)
 
-    def __check_lose(self) -> bool:
+    def __check_lose__(self) -> bool:
         return not self.__lives__.get_lives()
 
     def __end__(self, phrase: str):

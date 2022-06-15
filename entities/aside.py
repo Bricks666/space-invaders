@@ -2,6 +2,7 @@ from typing import Dict
 import pygame
 from consts.main import ASIDE_BAR_WIDTH, BORDER_WIDTH, HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
 from entities.text import Text
+from packages.sprites import Sprite
 from stores.lives import LivesStore
 from packages.inject import Inject
 from stores.scores import ScoresStore
@@ -10,7 +11,7 @@ from utils.loaders import sprite_loader
 
 @Inject(ScoresStore, "__scores__")
 @Inject(LivesStore, "__lives__")
-class Aside(pygame.sprite.Sprite):
+class Aside(Sprite):
     __injected__: Dict
     __scores__: ScoresStore
     __lives__: LivesStore

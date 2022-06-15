@@ -9,17 +9,10 @@ from stores.scores import ScoresStore
 
 def main():
     pygame.init()
-    db = DB()
-    db.init()
-    max_score = 0
-    max_scores = db.scores_table.get_best_score()
-    if len(max_scores) > 0:
-        max_score = max_scores[0][0]
-
-    ScoresStore(max_score)
+    DB()
+    ScoresStore()
     LevelStore()
     LivesStore()
-
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     game = Game(screen)
     game.init()

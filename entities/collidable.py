@@ -1,11 +1,12 @@
 from abc import ABCMeta, abstractmethod
 import pygame
+from packages.sprites import Sprite
 
 
 collidable = pygame.sprite.Group()
 
 
-class Collidable(pygame.sprite.Sprite, metaclass=ABCMeta):
+class Collidable(Sprite, metaclass=ABCMeta):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         collidable.add(self)
