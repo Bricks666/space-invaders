@@ -1,12 +1,10 @@
-from typing import Tuple
-import pygame
 from consts.main import SCREEN_MARGIN, SPRITE_SIZE,  Entities
 from entities.hero import Hero
 from entities.enemy import Enemy
 from utils.loaders import level_loader
 
 
-def generate_level(level_path: str) -> Tuple[pygame.sprite.Group, pygame.sprite.Group]:
+def generate_level(level_path: str) -> None:
     sprites = level_loader.load(level_path)
     for y in range(len(sprites)):
         enemies_count = 0

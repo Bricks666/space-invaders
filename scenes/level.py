@@ -5,28 +5,27 @@ import pygame
 from consts.main import BORDER_WIDTH, FIRE_COOLDOWN, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
 from entities.enemy import Enemy
 from entities.text import Text
-from packages.sprites import get_all_sprites, get_all_sprites_by_class
+from packages.core import get_all_sprites_by_class
 from scenes.scene import Scene
 from stores.lives import LivesStore
 from packages.inject import Inject
-from stores.scores import ScoresStore
 
 
 @Inject(LivesStore, "__lives__")
-@Inject(ScoresStore, "__scores__")
 class Level(Scene):
     __injected__: Dict[str, object]
     __lives__: LivesStore
-    __scores__: ScoresStore
 
-    def __init__(self, screen: pygame.Surface):
-        super().__init__(screen, get_all_sprites())
-        self.__last_enemy_fire_time__: float = time()
+    def __init__(self, screen: pygame.Surface, lives: int):
+        super().__init__(screen)
+        self.__lives__ = lives
+
         self.__enemies__ = get_all_sprites_by_class(Enemy)
-        self.__lives__ = self.__injected__.get("__lives__")
-        self.__scores__ = self.__injected__.get("__scores__")
+        self.__last_enemy_fire_time__: float = time()
 
-    def update(self):
+        self.__lives__ = self.__injected__.get("__lives__")
+
+    def update(self) -> None:
         if self.__check_lose__():
             self.__end__("Game over")
         elif self.__check_win__():
@@ -35,11 +34,11 @@ class Level(Scene):
             self.__fire_enemy__()
             super().update()
 
-    def draw(self):
+    def draw(self) -> None:
         self.__draw_border__()
         return super().draw()
 
-    def __fire_enemy__(self):
+    def __fire_enemy__(self) -> None:
         current_time = time()
         if self.__last_enemy_fire_time__ + FIRE_COOLDOWN <= current_time:
             enemies = self.__enemies__.sprites()
@@ -53,7 +52,7 @@ class Level(Scene):
     def __check_lose__(self) -> bool:
         return not self.__lives__.get_lives()
 
-    def __end__(self, phrase: str):
+    def __end__(self, phrase: str) -> None:
         self.__all_sprites__.empty()
         self.__draw_end__(phrase)
 
@@ -65,7 +64,7 @@ class Level(Scene):
         rect.y -= SPRITE_SIZE
         self._screen_.blit(phrase_text, rect)
 
-    def __draw_border__(self):
+    def __draw_border__(self) -> None:
         color = pygame.Color(250, 250, 250)
         top_left = (SCREEN_MARGIN - BORDER_WIDTH, SCREEN_MARGIN - BORDER_WIDTH)
         top_right = (SCREEN_MARGIN + LEVEL_WIDTH, SCREEN_MARGIN - BORDER_WIDTH)

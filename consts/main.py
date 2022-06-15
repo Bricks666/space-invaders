@@ -39,3 +39,5 @@ class Entities(Enum):
 
 
 STEP = 4
+
+UNICODE_NUMBER_OFFSET = 48

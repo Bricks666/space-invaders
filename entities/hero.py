@@ -3,7 +3,7 @@ from typing import Dict
 import pygame
 from consts.main import FIRE_COOLDOWN,  LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, STEP, BulletType,  Direction
 from entities.bullet import Bullet
-from entities.collidable import Collidable
+from packages.core import Collidable
 from stores.lives import LivesStore
 from packages.inject import Inject
 

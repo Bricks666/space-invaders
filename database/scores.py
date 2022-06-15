@@ -1,5 +1,5 @@
 import sqlite3
-from typing import List, Tuple
+from typing import Tuple
 from database.levels import LevelsTable
 from database.table import Table
 
@@ -18,7 +18,7 @@ class ScoreModel:
 TableScore = Tuple[int, int, int]
 
 
-class ScoresTable(Table):
+class ScoresTable(Table[TableScore, ScoreModel]):
     def __init__(self, connection: sqlite3.Connection):
         fields = ("score_id INTEGER UNSIGNED PRIMARY KEY," +
                   "level_id INTEGER UNSIGNED," +
@@ -26,9 +26,9 @@ class ScoresTable(Table):
                   f"FOREIGN KEY(level_id) REFERENCES {LevelsTable.__name__}(level_id)")
         super().__init__(connection, fields, "Scores")
 
-    def get_best_score(self, level_id: int = 1) -> List[Tuple[int]]:
+    def get_best_score(self, level_id: int):
         sql = (f"SELECT * FROM {self.__name__} " +
-               f"WHERE level_id = {level_id}" +
+               f"WHERE level_id = {level_id} " +
                "ORDER BY score DESC LIMIT 1")
         return self._transaction_(sql)
 

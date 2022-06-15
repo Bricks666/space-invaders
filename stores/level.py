@@ -11,6 +11,7 @@ class LevelStore:
     __current_level__: Optional[LevelModel]
     __injected__: Dict[str, object]
     __db__: DB
+    __levels_count__: int
 
     def __init__(self) -> None:
         self.__levels__ = []
@@ -32,7 +33,10 @@ class LevelStore:
 
     def fetch_levels(self) -> None:
         self.__levels__ = self.__db__.levels_table.get_levels()
-        pass
+        self.__levels_count__ = len(self.__levels__)
+
+    def get_levels_count(self) -> None:
+        return self.__levels_count__
 
     def __get_level_info__(self, level_id: int) -> Optional[LevelModel]:
         for level in self.__levels__:

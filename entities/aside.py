@@ -2,7 +2,7 @@ from typing import Dict
 import pygame
 from consts.main import ASIDE_BAR_WIDTH, BORDER_WIDTH, HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
 from entities.text import Text
-from packages.sprites import Sprite
+from packages.core import Sprite
 from stores.lives import LivesStore
 from packages.inject import Inject
 from stores.scores import ScoresStore

@@ -2,7 +2,7 @@ from time import time
 from typing import Dict
 import pygame
 from entities.bullet import Bullet
-from entities.collidable import Collidable
+from packages.core import Collidable
 from packages.inject import Inject
 from stores.scores import ScoresStore
 from utils.loaders import sprite_loader

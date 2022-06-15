@@ -1,6 +1,6 @@
 import pygame
 from consts.main import BULLET_SIZE, LEVEL_HEIGHT, SCREEN_MARGIN, SPRITE_SIZE, STEP, BulletType
-from entities.collidable import Collidable
+from packages.core import Collidable
 
 
 class Bullet(Collidable):

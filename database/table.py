@@ -1,18 +1,19 @@
 from abc import ABCMeta, abstractmethod
-from typing import List, Optional, Tuple, TypeVar
+from typing import Generic, List, Optional, Tuple, TypeVar
 import sqlite3
 
 R = TypeVar("R", bound=Optional[object])
 T = TypeVar("T", bound=Tuple)
 
 
-class Table(metaclass=ABCMeta):
+class Table(Generic[T, R], metaclass=ABCMeta):
     __name__: str
 
     def __init__(self, connection: sqlite3.Connection, fields: str, name: str):
         self.__name__ = name
         self.__connection__ = connection
-        initSQL = f"CREATE TABLE IF NOT EXISTS {self.__name__}(" + fields + ");"
+        initSQL = f"CREATE TABLE IF NOT EXISTS {self.__name__}(" + \
+            fields + ");"
         self._transaction_(initSQL)
 
     def _transaction_(self, sql: str) -> List[R]:
