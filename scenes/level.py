@@ -1,12 +1,11 @@
 from random import randint
 from time import time
 from typing import Dict
-import pygame
-from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
+from pygame import Surface, sprite, display, Rect
+from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, TEXT_COLOR
 from entities.enemy import Enemy
 from entities.text import Text
-from packages.core import get_all_sprites_by_class
-from scenes.scene import Scene
+from packages.core import Scene, get_all_sprites_by_class
 from stores.lives import LivesStore
 from packages.inject import Inject
 
@@ -15,15 +14,14 @@ from packages.inject import Inject
 class Level(Scene):
     __injected__: Dict[str, object]
     __lives__: LivesStore
+    __enemies__: sprite.Group
+    __level_name__: str
 
-    def __init__(self, screen: pygame.Surface, level_name: int):
+    def __init__(self, screen: Surface, level_name: str) -> None:
         super().__init__(screen)
-
-        self.__enemies__ = get_all_sprites_by_class(Enemy)
-        self.__last_enemy_fire_time__: float = time()
-
+        self.__enemies__ = sprite.Group()
         self.__lives__ = self.__injected__.get("__lives__")
-        pygame.display.set_caption(f"{GAME_NAME} - level: \"{level_name}\"")
+        self.__level_name__ = level_name
 
     def update(self) -> None:
         if self.__check_lose__():
@@ -37,6 +35,18 @@ class Level(Scene):
     def draw(self) -> None:
         self.__draw_border__()
         return super().draw()
+
+    def select(self) -> None:
+        self.__enemies__ = get_all_sprites_by_class(Enemy)
+        self.__last_enemy_fire_time__: float = time()
+
+        display.set_caption(f"{GAME_NAME} - level: \"{self.__level_name__}\"")
+
+        return super().select()
+
+    def unselect(self) -> None:
+        self.__enemies__.empty()
+        return super().unselect()
 
     def __fire_enemy__(self) -> None:
         current_time = time()
@@ -59,22 +69,21 @@ class Level(Scene):
     def __draw_end__(self, phase: str):
         phrase_text = Text.generate(phase)
         rect = phrase_text.get_rect()
-        rect.center = self._screen_.get_rect().center
+        rect.center = self.__screen__.get_rect().center
         rect.centerx = LEVEL_WIDTH / 2 + SCREEN_MARGIN
         rect.y -= SPRITE_SIZE
-        self._screen_.blit(phrase_text, rect)
+        self.__screen__.blit(phrase_text, rect)
 
     def __draw_border__(self) -> None:
-        color = pygame.Color(250, 250, 250)
         top_left = (SCREEN_MARGIN - BORDER_WIDTH, SCREEN_MARGIN - BORDER_WIDTH)
         top_right = (SCREEN_MARGIN + LEVEL_WIDTH, SCREEN_MARGIN - BORDER_WIDTH)
         bottom_left = (SCREEN_MARGIN,
                        SCREEN_MARGIN + LEVEL_HEIGHT)
-        self._screen_.fill(color,
-                           pygame.Rect(top_left, (LEVEL_WIDTH + BORDER_WIDTH, BORDER_WIDTH)))
-        self._screen_.fill(color,
-                           pygame.Rect(top_right, (BORDER_WIDTH, LEVEL_HEIGHT + BORDER_WIDTH * 2)))
-        self._screen_.fill(color,
-                           pygame.Rect(bottom_left, (LEVEL_WIDTH, BORDER_WIDTH)))
-        self._screen_.fill(color,
-                           pygame.Rect(top_left, (BORDER_WIDTH, LEVEL_HEIGHT + BORDER_WIDTH)))
+        self.__screen__.fill(TEXT_COLOR,
+                             Rect(top_left, (LEVEL_WIDTH + BORDER_WIDTH, BORDER_WIDTH)))
+        self.__screen__.fill(TEXT_COLOR,
+                             Rect(top_right, (BORDER_WIDTH, LEVEL_HEIGHT + BORDER_WIDTH * 2)))
+        self.__screen__.fill(TEXT_COLOR,
+                             Rect(bottom_left, (LEVEL_WIDTH, BORDER_WIDTH)))
+        self.__screen__.fill(TEXT_COLOR,
+                             Rect(top_left, (BORDER_WIDTH, LEVEL_HEIGHT + BORDER_WIDTH)))

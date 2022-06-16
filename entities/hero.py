@@ -6,7 +6,7 @@ from entities.bullet import Bullet
 from packages.core import Collidable
 from stores.lives import LivesStore
 from packages.inject import Inject
-from utils import sprite_loader
+from utils.loaders import sprite_loader
 
 
 

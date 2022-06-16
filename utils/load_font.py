@@ -3,4 +3,4 @@ from utils.loaders import font_loader
 
 
 def load_font() -> None:
-    Text.FONT = font_loader.load("PublicPixel.ttf")
+    Text.font = font_loader.load("PublicPixel.ttf")

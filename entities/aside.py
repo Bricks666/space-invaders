@@ -5,7 +5,7 @@ from entities.text import Text
 from stores.lives import LivesStore
 from packages.inject import Inject
 from stores.scores import ScoresStore
-from utils import sprite_loader
+from utils.loaders import sprite_loader
 
 
 @Inject(ScoresStore, "__scores__")
@@ -29,7 +29,6 @@ class Aside(pygame.sprite.Sprite):
         self.__lives__ = self.__injected__.get("__lives__")
 
     def draw(self) -> None:
-        print("draw")
         self.__screen__.fill(self.__background__, self.rect)
         self.__draw_current_score__()
         self.__draw_max_score__()

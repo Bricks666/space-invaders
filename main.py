@@ -5,6 +5,7 @@ from game import Game
 from stores.level import LevelStore
 from stores.lives import LivesStore
 from stores.scores import ScoresStore
+import pygame.examples.aliens
 
 
 def main():

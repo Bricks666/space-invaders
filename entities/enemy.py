@@ -5,7 +5,7 @@ from entities.bullet import Bullet
 from packages.core import Collidable
 from packages.inject import Inject
 from stores.scores import ScoresStore
-from utils import sprite_loader
+from utils.loaders import sprite_loader
 from consts import LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, BulletType,  Direction
 
 

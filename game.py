@@ -2,11 +2,12 @@ import sys
 from typing import Dict
 import pygame
 from consts import FPS, GAME_NAME
+from consts.colors import BG_COLOR
 from packages.events import CustomEventsTypes
-from scenes.levels_machine import LevelsMachine
 from entities.aside import Aside
 from packages.inject import Inject
 from database import DB
+from scenes.scene_machine import ScenesMachine
 from utils.load_font import load_font
 from utils.load_music import load_music
 from utils.loaders import sprite_loader
@@ -16,22 +17,23 @@ from utils.loaders import sprite_loader
 class Game:
     __injected__: Dict[str, object]
     __db__: DB
+    __scenes_machine__: ScenesMachine
 
     def __init__(self, screen: pygame.Surface) -> None:
         self.__screen__ = screen
-        self.__levels_machine__ = LevelsMachine(screen)
-        self.__aside__ = Aside(screen)
-        self.__running__ = False
+
+        self.__scenes_machine__ = ScenesMachine(screen)
+        # self.__aside__ = Aside(screen)
+
         self.__db__ = self.__injected__.get("__db__")
 
     def start(self):
         clock = pygame.time.Clock()
-        self.__running__ = True
-        while self.__running__:
-            self.__screen__.fill((0, 0, 0))
-            self.__levels_machine__.update()
-            self.__levels_machine__.draw()
-            self.__aside__.draw()
+        while True:
+            self.__screen__.fill(BG_COLOR)
+            self.__scenes_machine__.update()
+            self.__scenes_machine__.draw()
+            # self.__aside__.draw()
             self.__control_events__()
             pygame.display.update()
             clock.tick(FPS)
@@ -44,10 +46,10 @@ class Game:
         load_font()
 
         self.__db__.init()
-        self.__levels_machine__.on()
+        self.__scenes_machine__.on("level")
 
     def quite(self) -> None:
-        self.__levels_machine__.off()
+        self.__scenes_machine__.off()
         self.__db__.disconnect()
         pygame.font.quit()
         pygame.quit()
@@ -62,7 +64,10 @@ class Game:
                     self.start()
                 case pygame.KEYDOWN:
                     keys = pygame.key.get_pressed()
-                    print(keys[pygame.K_r], pygame.K_r, event.key)
                     if keys[pygame.K_r]:
-                        self.__levels_machine__.restart()
+                        self.__scenes_machine__.restart()
                         self.start()
+                    elif keys[pygame.K_m]:
+                        self.__scenes_machine__.change_scene("menu")
+                    elif keys[pygame.K_l]:
+                        self.__scenes_machine__.change_scene("level")
