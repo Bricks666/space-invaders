@@ -1,4 +1,4 @@
-from consts.main import SCREEN_MARGIN, SPRITE_SIZE,  Entities
+from consts import SCREEN_MARGIN, SPRITE_SIZE,  Entities
 from entities.hero import Hero
 from entities.enemy import Enemy
 from utils.loaders import level_loader

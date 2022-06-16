@@ -1,40 +1,44 @@
 from time import time
 from typing import Dict
 import pygame
-from consts.main import FIRE_COOLDOWN,  LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, STEP, BulletType,  Direction
+from consts import FIRE_COOLDOWN,  LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, STEP, BulletType,  Direction
 from entities.bullet import Bullet
 from packages.core import Collidable
 from stores.lives import LivesStore
 from packages.inject import Inject
+from utils import sprite_loader
 
-from utils.loaders import sprite_loader
 
 
 @Inject(LivesStore, "__lives__")
 class Hero(Collidable):
-    __injected__: Dict
+    __injected__: Dict[str, object]
     __lives__: LivesStore
     IMAGE: pygame.Surface = sprite_loader.load("hero.png")
     BULLET: pygame.Surface = sprite_loader.load("hero_bullet.png")
     KILL_SOUND: pygame.mixer.Sound
     DESTROY_SOUND: pygame.mixer.Sound
 
-    def __init__(self, x: float, y: float):
+    def __init__(self, x: float, y: float) -> None:
         super().__init__()
         self.image = pygame.transform.scale(
             Hero.IMAGE, (SPRITE_SIZE, SPRITE_SIZE))
+
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
         self.__start_x__ = x
         self.__start_y__ = y
-        self.__lives__ = self.__injected__.get("__lives__")
+
         self.__last_fire__ = 0
 
+        self.__lives__ = self.__injected__.get("__lives__")
+
     def update(self) -> None:
-        is_collided = self.__collide__()
-        if is_collided:
+        if self.__collide__():
             return
+
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_a] or pressed_keys[pygame.K_LEFT]:
             self.__move__(Direction.LEFT)
@@ -66,7 +70,7 @@ class Hero(Collidable):
     def __collide__(self) -> bool:
         return super().__collide__()
 
-    def __fire__(self):
+    def __fire__(self) -> None:
         current_time = time()
         if self.__last_fire__ + FIRE_COOLDOWN <= current_time:
             HeroBullet(Hero.BULLET, self.rect.centerx, self.rect.y,
@@ -75,7 +79,7 @@ class Hero(Collidable):
 
 
 class HeroBullet(Bullet):
-    def __init__(self, image: pygame.Surface, x: float, y: float, *group):
+    def __init__(self, image: pygame.Surface, x: float, y: float, *group) -> None:
         super().__init__(image, x, y, BulletType.HERO, *group)
 
     def __collide__(self) -> bool:

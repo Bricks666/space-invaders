@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Generic, List, Optional, Tuple, TypeVar
+from typing import Final, Generic, List, Optional, Tuple, TypeVar
 import sqlite3
 
 R = TypeVar("R", bound=Optional[object])
@@ -7,7 +7,7 @@ T = TypeVar("T", bound=Tuple)
 
 
 class Table(Generic[T, R], metaclass=ABCMeta):
-    __name__: str
+    __name__: Final[str]
 
     def __init__(self, connection: sqlite3.Connection, fields: str, name: str):
         self.__name__ = name

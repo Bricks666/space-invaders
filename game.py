@@ -1,14 +1,15 @@
 import sys
 from typing import Dict
 import pygame
-from consts.main import FPS
+from consts import FPS, GAME_NAME
 from packages.events import CustomEventsTypes
 from scenes.levels_machine import LevelsMachine
 from entities.aside import Aside
 from packages.inject import Inject
+from database import DB
 from utils.load_font import load_font
 from utils.load_music import load_music
-from database.db import DB
+from utils.loaders import sprite_loader
 
 
 @Inject(DB, "__db__")
@@ -36,9 +37,8 @@ class Game:
             clock.tick(FPS)
 
     def init(self) -> None:
-        pygame.display.set_caption("Space invaders")
-        pygame.mixer.init()
-        pygame.font.init()
+        pygame.display.set_caption(GAME_NAME)
+        pygame.display.set_icon(sprite_loader.load("enemy.png"))
 
         load_music()
         load_font()
@@ -46,13 +46,10 @@ class Game:
         self.__db__.init()
         self.__levels_machine__.on()
 
-    def restart(self) -> None:
-        self.__running__ = False
-        self.start()
-
     def quite(self) -> None:
         self.__levels_machine__.off()
         self.__db__.disconnect()
+        pygame.font.quit()
         pygame.quit()
         sys.exit(0)
 
@@ -62,10 +59,10 @@ class Game:
                 case pygame.QUIT:
                     self.quite()
                 case CustomEventsTypes.RESTART.value:
-                    self.restart()
+                    self.start()
                 case pygame.KEYDOWN:
                     keys = pygame.key.get_pressed()
                     print(keys[pygame.K_r], pygame.K_r, event.key)
                     if keys[pygame.K_r]:
                         self.__levels_machine__.restart()
-                        self.restart()
+                        self.start()

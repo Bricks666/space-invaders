@@ -1,5 +1,5 @@
 from typing import Dict, Optional
-from database.db import DB
+from database import DB
 from packages.inject import Inject, Injectable
 
 

@@ -2,7 +2,7 @@ from random import randint
 from time import time
 from typing import Dict
 import pygame
-from consts.main import BORDER_WIDTH, FIRE_COOLDOWN, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
+from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
 from entities.enemy import Enemy
 from entities.text import Text
 from packages.core import get_all_sprites_by_class
@@ -16,14 +16,14 @@ class Level(Scene):
     __injected__: Dict[str, object]
     __lives__: LivesStore
 
-    def __init__(self, screen: pygame.Surface, lives: int):
+    def __init__(self, screen: pygame.Surface, level_name: int):
         super().__init__(screen)
-        self.__lives__ = lives
 
         self.__enemies__ = get_all_sprites_by_class(Enemy)
         self.__last_enemy_fire_time__: float = time()
 
         self.__lives__ = self.__injected__.get("__lives__")
+        pygame.display.set_caption(f"{GAME_NAME} - level: \"{level_name}\"")
 
     def update(self) -> None:
         if self.__check_lose__():

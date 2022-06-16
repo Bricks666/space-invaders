@@ -1,5 +1,5 @@
 from typing import Dict
-from database.db import DB
+from database import DB
 from packages.inject import Inject, Injectable
 
 
@@ -16,7 +16,8 @@ class LivesStore:
         self.__db__ = self.__injected__.get("__db__")
 
     def fetch_lives(self, level_id: int) -> None:
-        self.__lives__ = self.__db__.levels_table.get_lives_on_level(level_id)
+        self.__lives__ = self.__db__.levels_table.get_lives_on_level(
+            level_id) or 0
 
     def get_lives(self) -> int:
         return self.__lives__

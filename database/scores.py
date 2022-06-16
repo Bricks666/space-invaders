@@ -1,13 +1,13 @@
 import sqlite3
-from typing import Tuple
+from typing import Final, Tuple
 from database.levels import LevelsTable
 from database.table import Table
 
 
 class ScoreModel:
-    score_id: int
-    level_id: int
-    score: int
+    score_id: Final[int]
+    level_id: Final[int]
+    score: Final[int]
 
     def __init__(self, score_id: int, level_id: int, score: int) -> None:
         self.score_id = score_id
@@ -20,7 +20,7 @@ TableScore = Tuple[int, int, int]
 
 class ScoresTable(Table[TableScore, ScoreModel]):
     def __init__(self, connection: sqlite3.Connection):
-        fields = ("score_id INTEGER UNSIGNED PRIMARY KEY," +
+        fields = ("score_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                   "level_id INTEGER UNSIGNED," +
                   "score INTEGER UNSIGNED," +
                   f"FOREIGN KEY(level_id) REFERENCES {LevelsTable.__name__}(level_id)")

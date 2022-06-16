@@ -1,13 +1,13 @@
 import sqlite3
-from typing import List, Tuple
+from typing import Final, List, Optional, Tuple
 from database.table import Table
 
 
 class LevelModel:
-    level_id: int
-    level_name: str
-    level_path: str
-    lives: int
+    level_id: Final[int]
+    level_name: Final[str]
+    level_path: Final[str]
+    lives: Final[int]
 
     def __init__(self, level_id: int, level_name: str, level_path: str, lives: int) -> None:
         self.level_id = level_id
@@ -32,10 +32,13 @@ class LevelsTable(Table[TableLevel, LevelModel]):
 
         return self._transaction_(sql)
 
-    def get_lives_on_level(self, level_id: int):
+    def get_lives_on_level(self, level_id: int) -> Optional[int]:
         sql = f"SELECT * FROM {self.__name__} WHERE level_id = {level_id} LIMIT 1;"
 
         level = self._transaction_(sql)
+
+        if not level:
+            return
 
         return level[0].lives
 

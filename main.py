@@ -1,6 +1,6 @@
 import pygame
-from consts.main import HEIGHT, WIDTH
-from database.db import DB
+from consts import HEIGHT, WIDTH
+from database import DB
 from game import Game
 from stores.level import LevelStore
 from stores.lives import LivesStore
@@ -9,6 +9,9 @@ from stores.scores import ScoresStore
 
 def main():
     pygame.init()
+    pygame.mixer.init()
+    pygame.font.init()
+
     DB()
     ScoresStore()
     LevelStore()

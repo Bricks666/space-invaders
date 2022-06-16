@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 import pygame
-from consts.main import UNICODE_NUMBER_OFFSET
+from consts import UNICODE_NUMBER_OFFSET
 from packages.core import reset_sprites
 from packages.events import CustomEventsTypes, emit_event
 from scenes.level import Level
@@ -8,7 +8,7 @@ from packages.inject import Inject
 from stores.level import LevelStore
 from stores.lives import LivesStore
 from stores.scores import ScoresStore
-from utils.generate_level import generate_level
+from utils import generate_level
 
 
 @Inject(LevelStore, "__levels__")
@@ -39,7 +39,8 @@ class LevelsMachine:
         self.__lives__.fetch_lives(current_level.level_id)
         self.__scores__.fetch_max_scores(current_level.level_id)
 
-        self.__active_level__ = Level(self.__screen__, current_level.lives)
+        self.__active_level__ = Level(
+            self.__screen__, current_level.level_name)
 
     def draw(self) -> None:
         if self.__active_level__:

@@ -4,6 +4,7 @@ T = TypeVar("T", bound=object)
 
 stores: Dict[object, object] = dict()
 
+
 def Injectable() -> Callable:
     def inner(cls: T) -> T:
         orig_init = cls.__init__

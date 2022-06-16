@@ -1,37 +1,41 @@
 from typing import Dict
 import pygame
-from consts.main import ASIDE_BAR_WIDTH, BORDER_WIDTH, HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
+from consts import ASIDE_BAR_WIDTH, BORDER_WIDTH, HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
 from entities.text import Text
-from packages.core import Sprite
 from stores.lives import LivesStore
 from packages.inject import Inject
 from stores.scores import ScoresStore
-from utils.loaders import sprite_loader
+from utils import sprite_loader
 
 
 @Inject(ScoresStore, "__scores__")
 @Inject(LivesStore, "__lives__")
-class Aside(Sprite):
-    __injected__: Dict
+class Aside(pygame.sprite.Sprite):
+    __injected__: Dict[str, object]
     __scores__: ScoresStore
     __lives__: LivesStore
+    __background__: pygame.Color
+    __margin__: float
 
-    def __init__(self, screen: pygame.Surface):
+    def __init__(self, screen: pygame.Surface) -> None:
         self.__screen__ = screen
         self.rect = pygame.Rect(LEVEL_WIDTH + SCREEN_MARGIN + BORDER_WIDTH * 2, SCREEN_MARGIN - BORDER_WIDTH,
                                 ASIDE_BAR_WIDTH, HEIGHT - SCREEN_MARGIN * 2 + BORDER_WIDTH * 2)
+
         self.__background__ = pygame.Color(0, 0, 0)
-        self.__scores__ = self.__injected__.get("__scores__")
-        self.__lives__ = self.__injected__.get("__lives__")
         self.__margin__ = SPRITE_SIZE / 2
 
-    def draw(self):
+        self.__scores__ = self.__injected__.get("__scores__")
+        self.__lives__ = self.__injected__.get("__lives__")
+
+    def draw(self) -> None:
+        print("draw")
         self.__screen__.fill(self.__background__, self.rect)
         self.__draw_current_score__()
         self.__draw_max_score__()
         self.__draw__lives__()
 
-    def __draw_max_score__(self):
+    def __draw_max_score__(self) -> None:
         label = Text.generate("Max score:")
         max_score = f"{self.__scores__.get_max_scores()} POINTS"
         max_scores_text = Text.generate(
@@ -46,7 +50,7 @@ class Aside(Sprite):
         self.__screen__.blit(label, label_rect)
         self.__screen__.blit(max_scores_text, score_rect)
 
-    def __draw_current_score__(self):
+    def __draw_current_score__(self) -> None:
         label = Text.generate("Current score:")
         current_score = f"{self.__scores__.get_scores()} POINTS"
         current_scores_text = Text.generate(
@@ -60,7 +64,7 @@ class Aside(Sprite):
         self.__screen__.blit(label, label_rect)
         self.__screen__.blit(current_scores_text, score_rect)
 
-    def __draw__lives__(self):
+    def __draw__lives__(self) -> None:
         for i in range(self.__lives__.get_lives()):
             live = self.__create_live__()
             rect = live.get_rect()
