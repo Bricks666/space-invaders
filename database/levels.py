@@ -1,19 +1,7 @@
 import sqlite3
-from typing import Final, List, Optional, Tuple
+from typing import List, Optional, Tuple
 from database.table import Table
-
-
-class LevelModel:
-    level_id: Final[int]
-    level_name: Final[str]
-    level_path: Final[str]
-    lives: Final[int]
-
-    def __init__(self, level_id: int, level_name: str, level_path: str, lives: int) -> None:
-        self.level_id = level_id
-        self.level_name = level_name
-        self.level_path = level_path
-        self.lives = lives
+from models import LevelModel
 
 
 TableLevel = Tuple[int, str, str, str]

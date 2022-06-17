@@ -13,6 +13,8 @@ class Text(pygame.sprite.Sprite):
         self.color = TEXT_COLOR
         self.message = message
         self.__last_message__ = ""
+        self.image = self.font.render(
+            message, True, self.color)
         self.rect = self.image.get_rect().move(x, y)
 
     def update(self, message_data: Dict[str, Union[str, int, float]] = {}) -> None:

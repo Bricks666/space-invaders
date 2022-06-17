@@ -1,6 +1,6 @@
 from time import time
-from typing import Dict
-import pygame
+from typing import Dict, List
+from pygame import Surface, mixer, transform, sprite
 from entities.bullet import Bullet
 from packages.core import Collidable
 from packages.inject import Inject
@@ -13,14 +13,14 @@ from consts import LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, BulletType,  Directi
 class Enemy(Collidable):
     __injected__: Dict[str, object]
     __scores__: ScoresStore
-    IMAGE: pygame.Surface = sprite_loader.load("enemy.png")
-    BULLET: pygame.Surface = sprite_loader.load("enemy_bullet.png")
+    IMAGE: Surface = sprite_loader.load("enemy.png")
+    BULLET: Surface = sprite_loader.load("enemy_bullet.png")
     DURATION: float = 0.5
-    DESTROY: pygame.mixer.Sound
+    DESTROY: mixer.Sound
 
-    def __init__(self, x: float, y: float, number: int, total_count: int, score: int = 50) -> None:
-        super().__init__()
-        self.image = pygame.transform.scale(
+    def __init__(self, x: float, y: float, number: int, total_count: int, groups: List[sprite.Group], score: int = 50) -> None:
+        super().__init__(*groups)
+        self.image = transform.scale(
             Enemy.IMAGE, (SPRITE_SIZE * 0.7, SPRITE_SIZE * 0.7))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -36,8 +36,7 @@ class Enemy(Collidable):
         self.__scores__ = self.__injected__.get("__scores__")
 
     def update(self) -> None:
-        is_collided = self.__collide__()
-        if is_collided:
+        if self.__collide__():
             return
         current_time = time()
         can_move = self.__can_move__(current_time)
@@ -51,8 +50,10 @@ class Enemy(Collidable):
         self.__end__ = self.__check_end__()
 
     def fire(self) -> None:
+        groups = self.groups()
+        groups.pop()
         EnemyBullet(Enemy.BULLET, self.rect.centerx,
-                    self.rect.y + self.rect.height)
+                    self.rect.y + self.rect.height, groups)
 
     def kill(self) -> None:
         Enemy.DESTROY.play()
@@ -77,15 +78,15 @@ class Enemy(Collidable):
 
 
 class EnemyBullet(Bullet):
-    def __init__(self, image: pygame.Surface, x: float, y: float) -> None:
-        super().__init__(image, x, y, BulletType.ENEMY)
+    def __init__(self, image: Surface, x: float, y: float, groups: List[sprite.Group]) -> None:
+        super().__init__(image, x, y, BulletType.ENEMY, groups)
 
     def __collide__(self) -> bool:
-        for sprite in self.__collidable__.sprites():
-            if sprite == self or isinstance(sprite, (Enemy, EnemyBullet)):
+        for s in self.__collidable__.sprites():
+            if s == self or isinstance(s, (Enemy, EnemyBullet)):
                 continue
-            if pygame.sprite.collide_rect(self, sprite):
+            if sprite.collide_rect(self, s):
                 self.kill()
-                sprite.kill()
+                s.kill()
                 return True
         return False

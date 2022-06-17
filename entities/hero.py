@@ -1,6 +1,6 @@
 from time import time
-from typing import Dict
-import pygame
+from typing import Dict, List
+from pygame import transform, Surface, mixer, K_a, key, K_LEFT, K_d, K_RIGHT, K_SPACE, sprite
 from consts import FIRE_COOLDOWN,  LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, STEP, BulletType,  Direction
 from entities.bullet import Bullet
 from packages.core import Collidable
@@ -9,19 +9,18 @@ from packages.inject import Inject
 from utils.loaders import sprite_loader
 
 
-
 @Inject(LivesStore, "__lives__")
 class Hero(Collidable):
     __injected__: Dict[str, object]
     __lives__: LivesStore
-    IMAGE: pygame.Surface = sprite_loader.load("hero.png")
-    BULLET: pygame.Surface = sprite_loader.load("hero_bullet.png")
-    KILL_SOUND: pygame.mixer.Sound
-    DESTROY_SOUND: pygame.mixer.Sound
+    IMAGE: Surface = sprite_loader.load("hero.png")
+    BULLET: Surface = sprite_loader.load("hero_bullet.png")
+    KILL_SOUND: mixer.Sound
+    DESTROY_SOUND: mixer.Sound
 
-    def __init__(self, x: float, y: float) -> None:
-        super().__init__()
-        self.image = pygame.transform.scale(
+    def __init__(self, x: float, y: float, groups: List[sprite.Group]) -> None:
+        super().__init__(*groups)
+        self.image = transform.scale(
             Hero.IMAGE, (SPRITE_SIZE, SPRITE_SIZE))
 
         self.rect = self.image.get_rect()
@@ -39,12 +38,12 @@ class Hero(Collidable):
         if self.__collide__():
             return
 
-        pressed_keys = pygame.key.get_pressed()
-        if pressed_keys[pygame.K_a] or pressed_keys[pygame.K_LEFT]:
+        pressed_keys = key.get_pressed()
+        if pressed_keys[K_a] or pressed_keys[K_LEFT]:
             self.__move__(Direction.LEFT)
-        if pressed_keys[pygame.K_d] or pressed_keys[pygame.K_RIGHT]:
+        if pressed_keys[K_d] or pressed_keys[K_RIGHT]:
             self.__move__(Direction.RIGHT)
-        if pressed_keys[pygame.K_SPACE]:
+        if pressed_keys[K_SPACE]:
             self.__fire__()
 
     def kill(self) -> None:
@@ -74,20 +73,20 @@ class Hero(Collidable):
         current_time = time()
         if self.__last_fire__ + FIRE_COOLDOWN <= current_time:
             HeroBullet(Hero.BULLET, self.rect.centerx, self.rect.y,
-                       self.groups()[0])
+                       self.groups())
             self.__last_fire__ = current_time
 
 
 class HeroBullet(Bullet):
-    def __init__(self, image: pygame.Surface, x: float, y: float, *group) -> None:
-        super().__init__(image, x, y, BulletType.HERO, *group)
+    def __init__(self, image: Surface, x: float, y: float, groups: List[sprite.Group]) -> None:
+        super().__init__(image, x, y, BulletType.HERO, groups)
 
     def __collide__(self) -> bool:
-        for sprite in self.__collidable__.sprites():
-            if sprite == self or isinstance(sprite, (Hero, HeroBullet)):
+        for s in self.__collidable__.sprites():
+            if s == self or isinstance(s, (Hero, HeroBullet)):
                 continue
-            if pygame.sprite.collide_rect(self, sprite):
+            if sprite.collide_rect(self, s):
                 self.kill()
-                sprite.kill()
+                s.kill()
                 return True
         return False

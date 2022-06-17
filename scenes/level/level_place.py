@@ -1,27 +1,34 @@
 from random import randint
 from time import time
 from typing import Dict
-from pygame import Surface, sprite, display, Rect
-from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, TEXT_COLOR
-from entities.enemy import Enemy
+from pygame import Surface, display, Rect
+from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, BORDER_COLOR
 from entities.text import Text
-from packages.core import Scene, get_all_sprites_by_class
+from packages.core import ScreenPart, Group, Collidable
 from stores.lives import LivesStore
 from packages.inject import Inject
+from entities.enemy import Enemy
+from models import LevelModel
+from stores.scores import ScoresStore
+from utils.generate_level import generate_level
 
 
 @Inject(LivesStore, "__lives__")
-class Level(Scene):
+@Inject(ScoresStore, "__scores__")
+class LevelPlace(ScreenPart):
     __injected__: Dict[str, object]
+    __enemies__: Group[Enemy]
+    __level__: LevelModel
     __lives__: LivesStore
-    __enemies__: sprite.Group
-    __level_name__: str
+    __scores__: ScoresStore
 
-    def __init__(self, screen: Surface, level_name: str) -> None:
+    def __init__(self, screen: Surface, level: LevelModel) -> None:
         super().__init__(screen)
-        self.__enemies__ = sprite.Group()
+        self.__enemies__ = Group[Enemy]()
+        self.__level__ = level
+
         self.__lives__ = self.__injected__.get("__lives__")
-        self.__level_name__ = level_name
+        self.__scores__ = self.__injected__.get("__scores__")
 
     def update(self) -> None:
         if self.__check_lose__():
@@ -37,15 +44,21 @@ class Level(Scene):
         return super().draw()
 
     def select(self) -> None:
-        self.__enemies__ = get_all_sprites_by_class(Enemy)
+        self.__all_sprites__, self.__enemies__ = generate_level(
+            self.__level__.level_path)
         self.__last_enemy_fire_time__: float = time()
 
-        display.set_caption(f"{GAME_NAME} - level: \"{self.__level_name__}\"")
+        display.set_caption(
+            f"{GAME_NAME} - level: {self.__level__.level_name}")
 
         return super().select()
 
     def unselect(self) -> None:
         self.__enemies__.empty()
+        Collidable.reset_collidable()
+        self.__scores__.save_score()
+        self.__scores__.reset_score()
+        self.__lives__.reset()
         return super().unselect()
 
     def __fire_enemy__(self) -> None:
@@ -79,11 +92,11 @@ class Level(Scene):
         top_right = (SCREEN_MARGIN + LEVEL_WIDTH, SCREEN_MARGIN - BORDER_WIDTH)
         bottom_left = (SCREEN_MARGIN,
                        SCREEN_MARGIN + LEVEL_HEIGHT)
-        self.__screen__.fill(TEXT_COLOR,
+        self.__screen__.fill(BORDER_COLOR,
                              Rect(top_left, (LEVEL_WIDTH + BORDER_WIDTH, BORDER_WIDTH)))
-        self.__screen__.fill(TEXT_COLOR,
+        self.__screen__.fill(BORDER_COLOR,
                              Rect(top_right, (BORDER_WIDTH, LEVEL_HEIGHT + BORDER_WIDTH * 2)))
-        self.__screen__.fill(TEXT_COLOR,
+        self.__screen__.fill(BORDER_COLOR,
                              Rect(bottom_left, (LEVEL_WIDTH, BORDER_WIDTH)))
-        self.__screen__.fill(TEXT_COLOR,
+        self.__screen__.fill(BORDER_COLOR,
                              Rect(top_left, (BORDER_WIDTH, LEVEL_HEIGHT + BORDER_WIDTH)))

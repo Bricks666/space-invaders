@@ -4,7 +4,6 @@ import pygame
 from consts import FPS, GAME_NAME
 from consts.colors import BG_COLOR
 from packages.events import CustomEventsTypes
-from entities.aside import Aside
 from packages.inject import Inject
 from database import DB
 from scenes.scene_machine import ScenesMachine
@@ -15,16 +14,17 @@ from utils.loaders import sprite_loader
 
 @Inject(DB, "__db__")
 class Game:
+    """
+    Основной объект игры
+    Занимает поверхностным менеджментом игровых процессов
+    """
     __injected__: Dict[str, object]
     __db__: DB
     __scenes_machine__: ScenesMachine
 
     def __init__(self, screen: pygame.Surface) -> None:
         self.__screen__ = screen
-
         self.__scenes_machine__ = ScenesMachine(screen)
-        # self.__aside__ = Aside(screen)
-
         self.__db__ = self.__injected__.get("__db__")
 
     def start(self):
@@ -33,7 +33,6 @@ class Game:
             self.__screen__.fill(BG_COLOR)
             self.__scenes_machine__.update()
             self.__scenes_machine__.draw()
-            # self.__aside__.draw()
             self.__control_events__()
             pygame.display.update()
             clock.tick(FPS)
@@ -41,9 +40,6 @@ class Game:
     def init(self) -> None:
         pygame.display.set_caption(GAME_NAME)
         pygame.display.set_icon(sprite_loader.load("enemy.png"))
-
-        load_music()
-        load_font()
 
         self.__db__.init()
         self.__scenes_machine__.on("level")

@@ -1,19 +1,17 @@
-from pygame import KEYDOWN, Surface, key, event
+from pygame import KEYDOWN, Surface, event
 from typing import Dict, Literal
-from packages.core import Machine, Scene
+from packages.core import StateMachine, Screen
 from scenes.level import Level
-from scenes.levels_machine import LevelsMachine
 
 _ScenesType = Literal["menu", "level"]
 
 
-class ScenesMachine(Machine[_ScenesType]):
+class ScenesMachine(StateMachine[_ScenesType]):
     def __init__(self, screen: Surface) -> None:
         super().__init__(screen)
 
-        self.__scenes__: Dict[_ScenesType, Scene] = {
-            "menu": Level(screen, "a"),
-            "level": LevelsMachine(screen)
+        self.__scenes__: Dict[_ScenesType, Screen] = {
+            "level": Level(screen)
         }
 
     def change_scene(self, scene_id: _ScenesType) -> None:

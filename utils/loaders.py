@@ -43,7 +43,7 @@ class FontLoader(Loader):
     def __init__(self, path: str = "./assets/fonts/"):
         super().__init__(path)
 
-    def load(self, font: str, size: int = 18) -> pygame.font.Font:
+    def load(self, font: str, size: int = 14) -> pygame.font.Font:
         return pygame.font.Font(self._path_ + font, size)
 
 

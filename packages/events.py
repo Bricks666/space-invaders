@@ -1,11 +1,13 @@
 from enum import Enum
+from typing import final
+from pygame import event, USEREVENT
 
-import pygame
 
-
+@final
 class CustomEventsTypes(Enum):
-    RESTART = pygame.USEREVENT + 1
+    RESTART = USEREVENT + 1
+    END = USEREVENT + 2
 
 
-def emit_event(evt: pygame.event.Event) -> None:
-    pygame.event.post(evt)
+def emit_event(evt: event.Event) -> None:
+    event.post(evt)

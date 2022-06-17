@@ -7,6 +7,9 @@ from stores.lives import LivesStore
 from stores.scores import ScoresStore
 import pygame.examples.aliens
 
+from utils.load_font import load_font
+from utils.load_music import load_music
+
 
 def main():
     pygame.init()
@@ -17,6 +20,12 @@ def main():
     ScoresStore()
     LevelStore()
     LivesStore()
+    """
+    Чтобы injectable сущности были доступны для внедрения
+    Их нужно создать
+    """
+    load_music()
+    load_font()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     game = Game(screen)
     game.init()

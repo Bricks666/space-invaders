@@ -1,6 +1,6 @@
 from typing import Dict, List, Optional
 from database import DB
-from database.levels import LevelModel
+from models import LevelModel
 from packages.inject import Inject, Injectable
 
 

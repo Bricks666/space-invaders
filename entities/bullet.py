@@ -1,15 +1,16 @@
-import pygame
-from consts import BULLET_SIZE, LEVEL_HEIGHT, SCREEN_MARGIN, SPRITE_SIZE, STEP, BulletType
+from typing import List
+from pygame import mixer, Surface, sprite, transform
+from consts import BULLET_SIZE, LEVEL_HEIGHT, SCREEN_MARGIN, STEP, BulletType
 from packages.core import Collidable
 
 
 class Bullet(Collidable):
-    SHOOT: pygame.mixer.Sound
+    SHOOT: mixer.Sound
 
-    def __init__(self, image: pygame.Surface, x: float, y: float, type: BulletType, *group) -> None:
-        super().__init__(*group)
+    def __init__(self, image: Surface, x: float, y: float, type: BulletType, groups: List[sprite.Group]) -> None:
+        super().__init__(*groups)
         Bullet.SHOOT.play()
-        self.image = pygame.transform.scale(image, (BULLET_SIZE))
+        self.image = transform.scale(image, (BULLET_SIZE))
         self.rect = self.image.get_rect()
         self.__type__ = type
         self.rect.x = x

@@ -1,9 +1,9 @@
 from typing import Dict, Optional
 import pygame
 from consts import UNICODE_NUMBER_OFFSET
-from packages.core import Machine, Scene, reset_sprites
+from packages.core import StateMachine, ScreenPart
 from packages.events import CustomEventsTypes, emit_event
-from scenes.level import Level
+from scenes.level.level_place import LevelPlace
 from packages.inject import Inject
 from stores.level import LevelStore
 from stores.lives import LivesStore
@@ -14,8 +14,7 @@ from utils.generate_level import generate_level
 @Inject(LevelStore, "__levels__")
 @Inject(LivesStore, "__lives__")
 @Inject(ScoresStore, "__scores__")
-class LevelsMachine(Machine[int], Scene):
-    START: pygame.mixer.Sound
+class LevelsMachine(StateMachine[int], ScreenPart):
     __injected__: Dict[str, object]
     __levels__: LevelStore
     __lives__: LivesStore
@@ -23,25 +22,21 @@ class LevelsMachine(Machine[int], Scene):
 
     def __init__(self, screen: pygame.Surface) -> None:
         super().__init__(screen)
+        ScreenPart.__init__(self, screen)
 
         self.__levels__ = self.__injected__.get("__levels__")
         self.__lives__ = self.__injected__.get("__lives__")
         self.__scores__ = self.__injected__.get("__scores__")
 
     def change_scene(self, level_id: int) -> None:
-        self.__exit_level__()
         current_level = self.__levels__.change_level(level_id)
-        generate_level(current_level.level_path)
+        super().change_scene(level_id)
         self.__lives__.fetch_lives(current_level.level_id)
         self.__scores__.fetch_max_scores(current_level.level_id)
-        super().change_scene(level_id)
 
     def update(self) -> None:
         self.__control_events__()
-        super().update()
-
-    def draw(self) -> None:
-        return super().draw()
+        return super().update()
 
     def restart(self) -> None:
         current_level = self.__levels__.get_current_level()
@@ -52,12 +47,11 @@ class LevelsMachine(Machine[int], Scene):
         self.__levels__.fetch_levels()
         levels = self.__levels__.get_levels()
 
-        for level_id in range(len(levels)):
-            level = Level(self.__screen__, levels[level_id].level_name)
-            self.__scenes__.update([[level_id, level]])
+        for level in levels:
+            level_place = LevelPlace(self.__screen__, level)
+            self.__scenes__.update([[level.level_id, level_place]])
 
     def off(self) -> None:
-        self.__exit_level__()
         return super().off()
 
     def select(self) -> None:
@@ -69,6 +63,7 @@ class LevelsMachine(Machine[int], Scene):
         return super().unselect()
 
     def __exit_level__(self) -> None:
+        self.__all_sprites__.empty()
         self.__lives__.reset()
         self.__scores__.save_score()
         self.__scores__.reset_score()
