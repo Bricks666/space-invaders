@@ -1,22 +1,22 @@
-import pygame
-from consts.main import BULLET_SIZE, LEVEL_HEIGHT, SCREEN_MARGIN, SPRITE_SIZE, STEP, BulletType
-from entities.collidable import Collidable
-from entities.sprite import Sprite
+from typing import List
+from pygame import mixer, Surface, sprite, transform
+from consts import BULLET_SIZE, LEVEL_HEIGHT, SCREEN_MARGIN, STEP, BulletType
+from packages.core import Collidable
 
 
-class Bullet(Collidable, Sprite):
-    SHOOT: pygame.mixer.Sound
+class Bullet(Collidable):
+    SHOOT: mixer.Sound
 
-    def __init__(self, image: pygame.Surface, x: float, y: float, type: BulletType, *group):
-        super().__init__(*group)
+    def __init__(self, image: Surface, x: float, y: float, type: BulletType, groups: List[sprite.Group]) -> None:
+        super().__init__(*groups)
         Bullet.SHOOT.play()
-        self.image = pygame.transform.scale(image, (BULLET_SIZE))
+        self.image = transform.scale(image, (BULLET_SIZE))
         self.rect = self.image.get_rect()
         self.__type__ = type
         self.rect.x = x
         self.rect.y = y
 
-    def update(self):
+    def update(self) -> None:
         if self.__collide__():
             return
 
@@ -25,5 +25,5 @@ class Bullet(Collidable, Sprite):
             return
         self.rect.y += STEP * 4 * self.__type__.value
 
-    def __is_out_of_screen__(self):
-        return self.rect.y <= SCREEN_MARGIN - self.rect.height or self.rect.y >= LEVEL_HEIGHT + SCREEN_MARGIN
+    def __is_out_of_screen__(self) -> bool:
+        return self.rect.y <= SCREEN_MARGIN or self.rect.y >= LEVEL_HEIGHT + SCREEN_MARGIN

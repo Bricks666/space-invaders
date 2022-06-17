@@ -1,5 +1,7 @@
 from sqlite3 import connect
 import sqlite3
+from typing import Optional
+from database.levels import LevelsTable
 from database.scores import ScoresTable
 from packages.inject import Injectable
 
@@ -11,10 +13,13 @@ class DB:
 
     def init(self) -> None:
         self.__connection__: sqlite3.Connection = self.__createConnection__()
-        self.__connection__.commit()
+        if not self.__connection__:
+            raise Exception("Connection wasn't created")
+        self.levels_table = LevelsTable(self.__connection__)
         self.scores_table = ScoresTable(self.__connection__)
+        self.__connection__.commit()
 
-    def __createConnection__(self) -> sqlite3.Connection:
+    def __createConnection__(self) -> Optional[sqlite3.Connection]:
         connection = None
         try:
             connection = connect(database=self.__name__)
@@ -26,6 +31,3 @@ class DB:
     def disconnect(self) -> None:
         self.__connection__.close()
         self.__connection__ = None
-
-
-db = DB()
