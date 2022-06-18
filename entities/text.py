@@ -23,7 +23,7 @@ class Text(pygame.sprite.Sprite):
             self.__last_message__ = message
             self.image = self.font.render(
                 message, True, self.color)
-
-    @classmethod
-    def generate(cls, message: str, color: pygame.Color = pygame.Color(125, 125, 125)) -> pygame.Surface:
-        return cls.font.render(message, True, color)
+            rect = self.image.get_rect()
+            rect.centerx = self.rect.centerx
+            rect.y = self.rect.y
+            self.rect = rect

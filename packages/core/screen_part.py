@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from pygame import Surface, sprite
 
 
@@ -16,7 +16,7 @@ class ScreenPart(ABC):
     def draw(self, *args) -> None:
         self.__all_sprites__.draw(self.__screen__, *args)
 
-    def select(self) -> None:
+    def select(self, *args) -> None:
         pass
 
     def unselect(self) -> None:

@@ -23,17 +23,6 @@ class Aside(ScreenPart):
         self.rect = Rect(LEVEL_WIDTH + SCREEN_MARGIN + BORDER_WIDTH * 2, SCREEN_MARGIN - BORDER_WIDTH,
                          ASIDE_BAR_WIDTH, HEIGHT - SCREEN_MARGIN * 2 + BORDER_WIDTH * 2)
 
-        max_scores_text = Text(
-            "Max score:", self.rect.x + self.__margin__, SPRITE_SIZE * 1.5 + 24)
-        max_scores = Text("{max_score} POINTS", self.rect.x +
-                          self.__margin__, SPRITE_SIZE * 2 + 24)
-        scores_text = Text(
-            "Current score:", self.rect.x + self.__margin__, SPRITE_SIZE * 0.5 + 24)
-        scores = Text(
-            "{score} POINTS", self.rect.x + self.__margin__, SPRITE_SIZE * 1 + 24)
-        self.__all_sprites__.add(
-            max_scores_text, max_scores, scores, scores_text)
-
         self.__live_sprites__ = Group[Live]()
 
         self.__scores__ = self.__injected__.get("__scores__")
@@ -52,6 +41,7 @@ class Aside(ScreenPart):
         return super().update(score)
 
     def select(self) -> None:
+        self.__create_text__()
         self.__create_lives__()
         return super().select()
 
@@ -65,7 +55,7 @@ class Aside(ScreenPart):
 
         if lives_count != live_sprites_count:
             for live in self.__live_sprites__:
-              live.kill()
+                live.kill()
             self.__create_lives__()
 
     def __create_lives__(self) -> None:
@@ -79,3 +69,20 @@ class Aside(ScreenPart):
             lives.append(Live(x(i), y))
         self.__all_sprites__.add(lives)
         self.__live_sprites__.add(lives)
+
+    def __create_text__(self) -> None:
+
+        max_scores_text = Text(
+            "Max score:", self.rect.x + self.__margin__, SPRITE_SIZE * 1.5 + 24)
+        max_scores = Text("{max_score} POINTS", self.rect.x +
+                          self.__margin__, SPRITE_SIZE * 2 + 24)
+        scores_text = Text(
+            "Current score:", self.rect.x + self.__margin__, SPRITE_SIZE * 0.5 + 24)
+        scores = Text(
+            "{score} POINTS", self.rect.x + self.__margin__, SPRITE_SIZE * 1 + 24)
+
+        max_scores_text.rect.centerx = max_scores.rect.centerx = \
+            scores_text.rect.centerx = scores.rect.centerx = self.rect.centerx
+
+        self.__all_sprites__.add(
+            max_scores_text, max_scores, scores, scores_text)

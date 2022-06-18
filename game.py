@@ -6,8 +6,7 @@ from consts.colors import BG_COLOR
 from packages.events import CustomEventsTypes
 from packages.inject import Inject
 from database import DB
-from scenes.scene_machine import ScenesMachine
-from utils.load_font import load_font
+from scenes import ScenesMachine
 from utils.load_music import load_music
 from utils.loaders import sprite_loader
 
@@ -41,6 +40,8 @@ class Game:
         pygame.display.set_caption(GAME_NAME)
         pygame.display.set_icon(sprite_loader.load("enemy.png"))
 
+        load_music()
+
         self.__db__.init()
         self.__scenes_machine__.on("level")
 
@@ -58,10 +59,12 @@ class Game:
                     self.quite()
                 case CustomEventsTypes.RESTART.value:
                     self.start()
+                case CustomEventsTypes.END.value:
+                    self.__scenes_machine__.change_scene("end", event.text)
                 case pygame.KEYDOWN:
                     keys = pygame.key.get_pressed()
                     if keys[pygame.K_r]:
-                        self.__scenes_machine__.restart()
+                        self.__scenes_machine__.change_scene("level")
                         self.start()
                     elif keys[pygame.K_m]:
                         self.__scenes_machine__.change_scene("menu")

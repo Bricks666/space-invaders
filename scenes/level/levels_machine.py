@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Dict
 import pygame
 from consts import UNICODE_NUMBER_OFFSET
 from packages.core import StateMachine, ScreenPart
@@ -8,7 +8,6 @@ from packages.inject import Inject
 from stores.level import LevelStore
 from stores.lives import LivesStore
 from stores.scores import ScoresStore
-from utils.generate_level import generate_level
 
 
 @Inject(LevelStore, "__levels__")
