@@ -52,9 +52,11 @@ class Hero(Entity):
 
     def fire(self) -> None:
         current_time = time()
+        groups = self.groups()
+        groups.pop()
         if self.__last_fire__ + FIRE_COOLDOWN <= current_time:
             HeroBullet(self.__images__.get("hero_bullet"), self.rect.centerx, self.rect.y,
-                       self.groups())
+                       groups)
             self.__last_fire__ = current_time
 
     def __can_move__(self, direction: Direction) -> bool:
