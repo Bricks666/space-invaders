@@ -1,4 +1,4 @@
-from pygame import init, mixer, font, display
+from pygame import init, mixer, font, display, mouse, cursors
 from consts import HEIGHT, WIDTH
 from game import Game
 from packages.inject import Injector
@@ -13,6 +13,7 @@ def main():
     init()
     mixer.init()
     font.init()
+    mouse.set_cursor(cursors.tri_left)
 
     Injector.init()
 

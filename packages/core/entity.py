@@ -17,8 +17,6 @@ class Entity(Collidable):
     """
     Интерфейс для сущности
     """
-    __musics__: Dict[str, mixer.Sound] = {}
-    __images__: Dict[str, Surface] = {}
     __speed__: float = 0
 
     @abstractmethod
@@ -34,11 +32,3 @@ class Entity(Collidable):
         Должен быть реализован у потомка
         """
         pass
-
-    @classmethod
-    def set_image(cls, name: str, image: Surface) -> None:
-        cls.__images__.update([[name, image]])
-
-    @classmethod
-    def set_music(cls, name: str, music: mixer.Sound) -> None:
-        cls.__musics__.update([[name, music]])

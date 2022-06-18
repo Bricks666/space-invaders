@@ -2,11 +2,13 @@ from abc import ABC, abstractmethod
 from typing import Final, List
 from pygame import sprite
 
+from packages.core.sprite import Sprite
+
 
 collidable = sprite.Group()
 
 
-class Collidable(sprite.Sprite, ABC):
+class Collidable(Sprite, ABC):
     __collidable__: Final[sprite.Group]
 
     def __init__(self, *args: List[sprite.Group], **kwargs):

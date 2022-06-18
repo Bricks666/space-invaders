@@ -39,11 +39,11 @@ class Aside(ScreenPart):
     def activate(self, *args, **kwargs) -> None:
         self.__create_text__()
         self.__create_lives__()
-        return super().activate()
+        return super().activate(*args, **kwargs)
 
     def inactivate(self, *args, **kwargs) -> None:
         self.__live_sprites__.empty()
-        return super().inactivate()
+        return super().inactivate(*args, **kwargs)
 
     def __validate_lives__(self) -> None:
         live_sprites_count = len(self.__live_sprites__)

@@ -1,4 +1,4 @@
-from typing import Generic, Iterable, List, TypeVar, Union
+from typing import Generic, Iterable, Iterator, List, TypeVar, Union
 from pygame import sprite
 
 
@@ -23,8 +23,11 @@ class Group(Generic[TGT], sprite.Group):
         return super().has(*sprites)
 
     def kill(self) -> None:
-      for sprite in self.sprites():
-        sprite.kill()
+        for sprite in self.sprites():
+            sprite.kill()
+
+    def __iter__(self) -> Iterator[TGT]:
+        return super().__iter__()
 
     @staticmethod
     def get_by_class(sprites: sprite.Group, cls: TGT) -> 'Group[TGT]':

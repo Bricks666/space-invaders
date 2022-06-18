@@ -56,9 +56,10 @@ class Enemy(Entity):
 
         if self.__end__:
             self.__change_direction__()
-            self.__down__()
-        else:
-            self.rect.x += SPRITE_SIZE / 4 * self.__direction__.value
+            self.rect.move_ip(0, SPRITE_SIZE / 2)
+            return
+
+        self.rect.move_ip(SPRITE_SIZE / 4 * self.__direction__.value, 0)
         self.__end__ = self.__check_end__()
 
     def kill(self) -> None:
@@ -73,11 +74,10 @@ class Enemy(Entity):
         self.__direction__ = Direction.RIGHT if self.__direction__ == Direction.LEFT else Direction.LEFT
         self.__end__ = False
 
-    def __can_move__(self, current_time) -> bool:
+    def __can_move__(self, current_time: float) -> bool:
         return self.__last_move__ + self.DURATION <= current_time
 
-    def __down__(self) -> None:
-        self.rect.y += SPRITE_SIZE / 2
+
 
     def __collide__(self) -> bool:
         return super().__collide__()

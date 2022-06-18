@@ -1,6 +1,6 @@
 from pygame import KEYDOWN, K_l,  event, key
 from packages.core import Screen
-from packages.events import CustomEventsTypes, create_event_params, emit_event
+from packages.events import CustomEventsTypes, custom_event, emit_event
 from screens.menu.menu_part import MenuPart
 
 
@@ -14,6 +14,6 @@ class Menu(Screen):
             if evt.type == KEYDOWN:
                 keys = key.get_pressed()
                 if keys[K_l]:
-                    evt = event.Event(
-                        CustomEventsTypes.CHANGE_SCREEN.value, create_event_params(screen="level"))
+                    evt = custom_event(
+                        CustomEventsTypes.CHANGE_SCREEN, screen="levels")
                     emit_event(evt)

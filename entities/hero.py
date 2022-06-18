@@ -48,7 +48,7 @@ class Hero(Entity):
 
     def move(self, direction: Direction) -> None:
         if self.__can_move__(direction):
-            self.rect.x += self.__speed__ * direction.value
+            self.rect.move_ip(self.__speed__ * direction.value, 0)
 
     def fire(self) -> None:
         current_time = time()
