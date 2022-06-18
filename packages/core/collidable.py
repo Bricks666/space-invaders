@@ -21,10 +21,3 @@ class Collidable(sprite.Sprite, ABC):
     @staticmethod
     def reset_collidable() -> None:
         collidable.empty()
-
-
-class Entity:
-    """ Описать класс Entity, он должен быть базовым для героя, врага """
-    __musics__: bool
-    __images__: bool
-    pass

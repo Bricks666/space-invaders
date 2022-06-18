@@ -4,7 +4,9 @@ from game import Game
 from packages.inject import Injector
 import pygame.examples.aliens
 
-from utils.load_font import load_font
+from utils.load_fonts import load_fonts
+from utils.load_images import load_images
+from utils.load_musics import load_musics
 
 
 def main():
@@ -14,7 +16,9 @@ def main():
 
     Injector.init()
 
-    load_font()
+    load_fonts()
+    load_images()
+    load_musics()
 
     screen = display.set_mode((WIDTH, HEIGHT))
     game = Game(screen)

@@ -26,4 +26,4 @@ class Bullet(Collidable):
         self.rect.y += STEP * 4 * self.__type__.value
 
     def __is_out_of_screen__(self) -> bool:
-        return self.rect.y <= SCREEN_MARGIN or self.rect.y >= LEVEL_HEIGHT + SCREEN_MARGIN
+        return self.rect.y <= SCREEN_MARGIN or self.rect.y >= LEVEL_HEIGHT

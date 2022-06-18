@@ -9,7 +9,7 @@ size_to_pixels: Dict[_FontSizes, int] = {
 }
 
 
-def load_font() -> None:
+def load_fonts() -> None:
     for size, pixels in size_to_pixels.items():
         Text.fonts.update(
             [[size, font_loader.load("PublicPixel.ttf", pixels)]])

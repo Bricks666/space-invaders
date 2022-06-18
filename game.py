@@ -7,7 +7,6 @@ from packages.events import CustomEventsTypes
 from packages.inject import Injector
 from database import DB
 from screens import ScreensMachine
-from utils.load_music import load_music
 from utils.loaders import sprite_loader
 
 
@@ -39,8 +38,6 @@ class Game:
     def init(self) -> None:
         pygame.display.set_caption(GAME_NAME)
         pygame.display.set_icon(sprite_loader.load("enemy.png"))
-
-        load_music()
 
         self.__db__.init()
         self.__screens_machine__.activate("menu")
