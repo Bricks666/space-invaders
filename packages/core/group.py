@@ -2,7 +2,7 @@ from typing import Generic, Iterable, List, TypeVar, Union
 from pygame import sprite
 
 
-TGT = TypeVar("TGT", bound=sprite.Group)
+TGT = TypeVar("TGT", bound=sprite.Sprite)
 
 
 class Group(Generic[TGT], sprite.Group):
@@ -21,6 +21,10 @@ class Group(Generic[TGT], sprite.Group):
 
     def has(self, *sprites: TGT) -> bool:
         return super().has(*sprites)
+
+    def kill(self) -> None:
+      for sprite in self.sprites():
+        sprite.kill()
 
     @staticmethod
     def get_by_class(sprites: sprite.Group, cls: TGT) -> 'Group[TGT]':

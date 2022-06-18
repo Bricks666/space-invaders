@@ -4,14 +4,14 @@ import pygame
 from consts import FPS, GAME_NAME
 from consts.colors import BG_COLOR
 from packages.events import CustomEventsTypes
-from packages.inject import Inject
+from packages.inject import Injector
 from database import DB
-from scenes import ScenesMachine
+from screens import ScreensMachine
 from utils.load_music import load_music
 from utils.loaders import sprite_loader
 
 
-@Inject(DB, "__db__")
+@Injector.inject(DB, "__db__")
 class Game:
     """
     Основной объект игры
@@ -19,19 +19,19 @@ class Game:
     """
     __injected__: Dict[str, object]
     __db__: DB
-    __scenes_machine__: ScenesMachine
+    __screens_machine__: ScreensMachine
 
     def __init__(self, screen: pygame.Surface) -> None:
         self.__screen__ = screen
-        self.__scenes_machine__ = ScenesMachine(screen)
+        self.__screens_machine__ = ScreensMachine(screen)
         self.__db__ = self.__injected__.get("__db__")
 
     def start(self):
         clock = pygame.time.Clock()
         while True:
             self.__screen__.fill(BG_COLOR)
-            self.__scenes_machine__.update()
-            self.__scenes_machine__.draw()
+            self.__screens_machine__.update()
+            self.__screens_machine__.draw()
             self.__control_events__()
             pygame.display.update()
             clock.tick(FPS)
@@ -43,10 +43,10 @@ class Game:
         load_music()
 
         self.__db__.init()
-        self.__scenes_machine__.on("level")
+        self.__screens_machine__.activate("menu")
 
     def quite(self) -> None:
-        self.__scenes_machine__.off()
+        self.__screens_machine__.inactivate()
         self.__db__.disconnect()
         pygame.font.quit()
         pygame.quit()
@@ -54,19 +54,12 @@ class Game:
 
     def __control_events__(self) -> None:
         for event in pygame.event.get():
-            match event.type:
-                case pygame.QUIT:
-                    self.quite()
-                case CustomEventsTypes.RESTART.value:
-                    self.start()
-                case CustomEventsTypes.END.value:
-                    self.__scenes_machine__.change_scene("end", event.text)
-                case pygame.KEYDOWN:
-                    keys = pygame.key.get_pressed()
-                    if keys[pygame.K_r]:
-                        self.__scenes_machine__.change_scene("level")
-                        self.start()
-                    elif keys[pygame.K_m]:
-                        self.__scenes_machine__.change_scene("menu")
-                    elif keys[pygame.K_l]:
-                        self.__scenes_machine__.change_scene("level")
+            if event.type == pygame.QUIT:
+                self.quite()
+            elif event.type == CustomEventsTypes.CHANGE_SCREEN.value:
+                self.__screens_machine__.change_state(
+                    event.screen, *event.args)
+            elif event.type == pygame.KEYDOWN:
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_m]:
+                    self.__screens_machine__.change_state("menu")

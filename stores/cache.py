@@ -1,11 +1,11 @@
 from typing import Any, Dict, TypeVar, Union
-from packages.inject import Injectable
+from packages.inject import Injector
 
 
 T = TypeVar("T", bound=Any)
 
 
-@Injectable()
+@Injector.injectable()
 class Cache:
     __cached__: Dict[str, Any]
 

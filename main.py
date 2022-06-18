@@ -1,33 +1,22 @@
-import pygame
+from pygame import init, mixer, font, display
 from consts import HEIGHT, WIDTH
-from database import DB
 from game import Game
-from stores.cache import Cache
-from stores.level import LevelStore
-from stores.lives import LivesStore
-from stores.scores import ScoresStore
+from packages.inject import Injector
 import pygame.examples.aliens
 
 from utils.load_font import load_font
 
 
 def main():
-    pygame.init()
-    pygame.mixer.init()
-    pygame.font.init()
+    init()
+    mixer.init()
+    font.init()
 
-    DB()
-    ScoresStore()
-    LevelStore()
-    LivesStore()
-    Cache()
-    """
-    Чтобы injectable сущности были доступны для внедрения
-    Их нужно создать
-    """
+    Injector.init()
+
     load_font()
 
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = display.set_mode((WIDTH, HEIGHT))
     game = Game(screen)
     game.init()
     game.start()

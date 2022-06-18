@@ -1,7 +1,7 @@
 from entities.bullet import Bullet
 from entities.enemy import Enemy
 from entities.hero import Hero
-from scenes.level import Level
+from screens.level import Level
 from utils.loaders import sound_loader
 
 

@@ -3,13 +3,13 @@ from typing import Dict, List
 from pygame import Surface, mixer, transform, sprite
 from entities.bullet import Bullet
 from packages.core import Collidable
-from packages.inject import Inject
+from packages.inject import Injector
 from stores.scores import ScoresStore
 from utils.loaders import sprite_loader
 from consts import LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, BulletType,  Direction
 
 
-@Inject(ScoresStore, "__scores__")
+@Injector.inject(ScoresStore, "__scores__")
 class Enemy(Collidable):
     __injected__: Dict[str, object]
     __scores__: ScoresStore

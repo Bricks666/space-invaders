@@ -1,42 +1,47 @@
-from typing import Callable, Dict, TypeVar
+from typing import Callable, Dict, List, TypeVar, final
+
 
 T = TypeVar("T", bound=object)
 
-stores: Dict[object, object] = dict()
 
+@final
+class Injector:
+    __injectable_dict__: Dict[str, object] = {}
+    __injectable_list__: List[object] = []
 
-def Injectable() -> Callable:
-    def inner(cls: T) -> T:
-        orig_init = cls.__init__
+    @classmethod
+    def inject(cls, store_class: object, name: str) -> Callable:
+        def inner(injectable: T) -> T:
+            orig_init = injectable.__init__
 
-        def __init__(self: T, *args, **kwargs) -> None:
-            stores.update([[cls, self]])
-            orig_init(self, *args, **kwargs)
+            def __init__(self: T, *args, **kwargs) -> None:
+                if not hasattr(self, "__injected__"):
+                    self.__injected__ = dict()
 
-        cls.__init__ = __init__
-        return cls
+                store = cls.__injectable_dict__.get(store_class)
+                if not store:
+                    raise ValueError(
+                        f'Store with type {store_class} is not exists')
 
-    return inner
+                self.__injected__.update([[name, store]])
 
+                orig_init(self, *args, **kwargs)
 
-def Inject(StoreClass: object, name: str) -> Callable:
-    def inner(cls: T) -> T:
-        orig_init = cls.__init__
+            injectable.__init__ = __init__
 
-        def __init__(self: T, *args, **kwargs) -> None:
-            if not hasattr(self, "__injected__"):
-                self.__injected__ = dict()
+            return injectable
 
-            store = stores.get(StoreClass)
-            if not store:
-                raise ValueError(f'Store with type {StoreClass} is not exists')
+        return inner
 
-            self.__injected__.update([[name, store]])
+    @classmethod
+    def injectable(cls) -> Callable:
+        def inner(injectable: T) -> T:
+            cls.__injectable_list__.append(injectable)
+            return injectable
 
-            orig_init(self, *args, **kwargs)
+        return inner
 
-        cls.__init__ = __init__
-
-        return cls
-
-    return inner
+    @classmethod
+    def init(cls) -> None:
+        for injectable in cls.__injectable_list__:
+            cls.__injectable_dict__.update([[injectable, injectable()]])

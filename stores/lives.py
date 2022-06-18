@@ -1,10 +1,10 @@
 from typing import Dict
 from database import DB
-from packages.inject import Inject, Injectable
+from packages.inject import Injector
 
 
-@Injectable()
-@Inject(DB, "__db__")
+@Injector.injectable()
+@Injector.inject(DB, "__db__")
 class LivesStore:
     __lives__: int
     __injected__: Dict

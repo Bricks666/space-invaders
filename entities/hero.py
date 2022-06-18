@@ -5,11 +5,11 @@ from consts import FIRE_COOLDOWN,  LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, STEP
 from entities.bullet import Bullet
 from packages.core import Collidable
 from stores.lives import LivesStore
-from packages.inject import Inject
+from packages.inject import Injector
 from utils.loaders import sprite_loader
 
 
-@Inject(LivesStore, "__lives__")
+@Injector.inject(LivesStore, "__lives__")
 class Hero(Collidable):
     __injected__: Dict[str, object]
     __lives__: LivesStore

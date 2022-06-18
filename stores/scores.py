@@ -1,10 +1,10 @@
 from typing import Dict, Optional
 from database import DB
-from packages.inject import Inject, Injectable
+from packages.inject import Injector
 
 
-@Injectable()
-@Inject(DB, "__db__")
+@Injector.injectable()
+@Injector.inject(DB, "__db__")
 class ScoresStore:
     __max_scores__: int
     __value__: int
@@ -24,7 +24,9 @@ class ScoresStore:
         if len(max_scores):
             self.__max_scores__ = max_scores[0].score
 
-    def save_score(self) -> None:
+        self.__value__ = 0
+
+    def save(self) -> None:
         if self.__level_id__:
             self.__db__.scores_table.add_score(
                 self.__level_id__, self.__value__)
@@ -38,6 +40,6 @@ class ScoresStore:
     def get_max_scores(self) -> int:
         return self.__max_scores__
 
-    def reset_score(self) -> None:
+    def reset(self) -> None:
         self.__max_scores__ = max(self.__max_scores__, self.__value__)
         self.__value__ = 0

@@ -1,14 +1,12 @@
 from random import randint
 from time import time
-from typing import Dict, Tuple, Type
+from typing import Dict, Tuple
 from pygame import Surface, display, Rect, event, sprite
-from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, BORDER_COLOR
-from entities.text import Text
+from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, BORDER_COLOR
 from packages.core import ScreenPart, Group, Collidable
-from packages.events import CustomEventsTypes, emit_event
-from stores.cache import Cache
+from packages.events import CustomEventsTypes, create_event_params, emit_event
 from stores.lives import LivesStore
-from packages.inject import Inject
+from packages.inject import Injector
 from entities.enemy import Enemy
 from models import LevelModel
 from stores.scores import ScoresStore
@@ -18,11 +16,8 @@ from utils.generate_level import generate_level
 _Sprites = Tuple[Group[sprite.Sprite], Group[Enemy]]
 
 
-""" @Inject(Cache, "__cache__") """
-
-
-@Inject(LivesStore, "__lives__")
-@Inject(ScoresStore, "__scores__")
+@Injector.inject(LivesStore, "__lives__")
+@Injector.inject(ScoresStore, "__scores__")
 class LevelPlace(ScreenPart):
     __injected__: Dict[str, object]
     __enemies__: Group[Enemy]
@@ -38,7 +33,6 @@ class LevelPlace(ScreenPart):
 
         self.__lives__ = self.__injected__.get("__lives__")
         self.__scores__ = self.__injected__.get("__scores__")
-        """ self.__cache__ = self.__injected__.get("__cache__") """
 
     def update(self) -> None:
         if self.__check_lose__():
@@ -53,20 +47,9 @@ class LevelPlace(ScreenPart):
         self.__draw_border__()
         return super().draw()
 
-    def select(self) -> None:
-        """         sprites: _Sprites = ()
+    def activate(self) -> None:
 
-        cached: _Sprites = self.__cache__.get(self.__level__.level_name)
-
-        if cached:
-            sprites = tuple(Group[sprites[0]](sprites)
-                            for sprites in cached)
-        else: """
-        sprites = generate_level(
-            self.__level__.level_path)
-        """             self.__cache__.set(self.__level__.level_name,
-                                  tuple(sprite.sprites() for sprite in sprites)) """
-
+        sprites = generate_level(self.__level__.level_path)
         self.__all_sprites__ = sprites[0]
         self.__enemies__ = sprites[1]
         self.__last_enemy_fire_time__: float = time()
@@ -74,13 +57,15 @@ class LevelPlace(ScreenPart):
         display.set_caption(
             f"{GAME_NAME} - level: {self.__level__.level_name}")
 
-        return super().select()
+        return super().activate()
 
-    def unselect(self) -> None:
+    def inactivate(self) -> None:
         self.__enemies__.empty()
         Collidable.reset_collidable()
-        self.__scores__.save_score()
-        return super().unselect()
+
+        self.__scores__.save()
+
+        return super().inactivate()
 
     def __fire_enemy__(self) -> None:
         current_time = time()
@@ -97,7 +82,8 @@ class LevelPlace(ScreenPart):
         return not self.__lives__.get_lives()
 
     def __end__(self, phrase: str) -> None:
-        evt = event.Event(CustomEventsTypes.END.value, {"text": phrase})
+        evt = event.Event(CustomEventsTypes.CHANGE_SCREEN.value,
+                          create_event_params(args=(phrase,), screen="end"))
         emit_event(evt)
 
     def __draw_border__(self) -> None:
