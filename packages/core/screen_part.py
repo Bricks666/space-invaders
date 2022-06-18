@@ -1,13 +1,14 @@
-from abc import ABC, abstractmethod
 from pygame import Surface, sprite
+from packages.core.activate import Activate
+from packages.core.group import Group
 
 
-class ScreenPart(ABC):
-    __all_sprites__: sprite.Group
+class ScreenPart(Activate):
+    __all_sprites__: Group[sprite.Sprite]
     __screen__: Surface
 
     def __init__(self, screen: Surface) -> None:
-        self.__all_sprites__ = sprite.Group()
+        self.__all_sprites__ = Group[sprite.Sprite]()
         self.__screen__ = screen
 
     def update(self, *args) -> None:
@@ -16,8 +17,9 @@ class ScreenPart(ABC):
     def draw(self, *args) -> None:
         self.__all_sprites__.draw(self.__screen__, *args)
 
-    def select(self) -> None:
-        pass
+    def activate(self, *args, **kwargs) -> None:
+        return super().activate(*args, **kwargs)
 
-    def unselect(self) -> None:
+    def inactivate(self, *args, **kwargs) -> None:
         self.__all_sprites__.empty()
+        return super().inactivate(*args, **kwargs)

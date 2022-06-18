@@ -5,9 +5,13 @@ from pygame import event, USEREVENT
 
 @final
 class CustomEventsTypes(Enum):
-    RESTART = USEREVENT + 1
-    END = USEREVENT + 2
-
+    CHANGE_SCREEN = USEREVENT + 1
+    RESTART = USEREVENT + 2
 
 def emit_event(evt: event.Event) -> None:
     event.post(evt)
+
+
+def custom_event(type: CustomEventsTypes, *args, **kwargs) -> event.Event:
+    kwargs.update([["args", args]])
+    return event.Event(type.value, kwargs)

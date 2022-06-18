@@ -1,0 +1,15 @@
+from typing import Dict
+from pygame import Surface, sprite, mixer
+
+
+class Sprite(sprite.Sprite):
+    __musics__: Dict[str, mixer.Sound] = {}
+    __images__: Dict[str, Surface] = {}
+
+    @classmethod
+    def set_image(cls, name: str, image: Surface) -> None:
+        cls.__images__.update([[name, image]])
+
+    @classmethod
+    def set_music(cls, name: str, music: mixer.Sound) -> None:
+        cls.__musics__.update([[name, music]])

@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 from database import DB
 from models import LevelModel
-from packages.inject import Inject, Injectable
+from packages.inject import Injector
 
 
-@Injectable()
-@Inject(DB, "__db__")
+@Injector.injectable()
+@Injector.inject(DB, "__db__")
 class LevelStore:
     __levels__: List[LevelModel]
     __current_level__: Optional[LevelModel]

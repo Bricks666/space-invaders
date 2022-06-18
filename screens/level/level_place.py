@@ -1,65 +1,86 @@
 from random import randint
 from time import time
 from typing import Dict
-from pygame import Surface, display, Rect
-from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, BORDER_COLOR
-from entities.text import Text
+from pygame import K_LEFT, K_RIGHT, K_SPACE, K_a, K_d, Surface, display, Rect, event, key
+from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, BORDER_COLOR
+from entities.hero import Hero
 from packages.core import ScreenPart, Group, Collidable
-from stores.lives import LivesStore
-from packages.inject import Inject
+from packages.core.entity import Direction
+from packages.events import CustomEventsTypes, custom_event,  emit_event
+from packages.inject import Injector
 from entities.enemy import Enemy
-from models import LevelModel
+from stores.level import LevelStore
+from stores.lives import LivesStore
 from stores.scores import ScoresStore
 from utils.generate_level import generate_level
 
 
-@Inject(LivesStore, "__lives__")
-@Inject(ScoresStore, "__scores__")
+@Injector.inject(ScoresStore, "__scores__")
+@Injector.inject(LivesStore, "__lives__")
+@Injector.inject(LevelStore, "__levels__")
 class LevelPlace(ScreenPart):
     __injected__: Dict[str, object]
     __enemies__: Group[Enemy]
-    __level__: LevelModel
-    __lives__: LivesStore
+    __heros__: Group[Hero]
     __scores__: ScoresStore
+    __levels__: LevelStore
+    __lives__: LivesStore
 
-    def __init__(self, screen: Surface, level: LevelModel) -> None:
+    def __init__(self, screen: Surface) -> None:
         super().__init__(screen)
         self.__enemies__ = Group[Enemy]()
-        self.__level__ = level
 
-        self.__lives__ = self.__injected__.get("__lives__")
         self.__scores__ = self.__injected__.get("__scores__")
+        self.__levels__ = self.__injected__.get("__levels__")
+        self.__lives__ = self.__injected__.get("__lives__")
 
     def update(self) -> None:
         if self.__check_lose__():
             self.__end__("Game over")
+            return
         elif self.__check_win__():
             self.__end__("You win")
-        else:
-            self.__fire_enemy__()
-            super().update()
+            return
+
+        keys = key.get_pressed()
+        hero = self.__get_hero__()
+        if (keys[K_RIGHT] or keys[K_d]) and hero:
+            hero.move(Direction.RIGHT)
+        elif (keys[K_LEFT] or keys[K_a]) and hero:
+            hero.move(Direction.LEFT)
+        if keys[K_SPACE] and hero:
+            hero.fire()
+
+        self.__move_enemies__()
+        self.__fire_enemy__()
+        super().update()
 
     def draw(self) -> None:
         self.__draw_border__()
         return super().draw()
 
-    def select(self) -> None:
-        self.__all_sprites__, self.__enemies__ = generate_level(
-            self.__level__.level_path)
+    def activate(self, level_id: int) -> None:
+        current_level = self.__levels__.change_level(level_id)
+        self.__lives__.fetch_lives(level_id)
+        self.__scores__.fetch_max_scores(level_id)
+        sprites = generate_level(current_level.level_path)
+        self.__all_sprites__ = sprites[0]
+        self.__enemies__ = sprites[1]
+        self.__heros__ = sprites[2]
         self.__last_enemy_fire_time__: float = time()
 
         display.set_caption(
-            f"{GAME_NAME} - level: {self.__level__.level_name}")
+            f"{GAME_NAME} - level: {current_level.level_name}")
 
-        return super().select()
+        return super().activate()
 
-    def unselect(self) -> None:
+    def inactivate(self) -> None:
         self.__enemies__.empty()
         Collidable.reset_collidable()
-        self.__scores__.save_score()
-        self.__scores__.reset_score()
-        self.__lives__.reset()
-        return super().unselect()
+
+        self.__scores__.save()
+
+        return super().inactivate()
 
     def __fire_enemy__(self) -> None:
         current_time = time()
@@ -69,23 +90,23 @@ class LevelPlace(ScreenPart):
             enemies[shooter].fire()
             self.__last_enemy_fire_time__ = current_time
 
+    def __move_enemies__(self) -> None:
+        for enemy in self.__enemies__:
+            enemy.move()
+
+    def __get_hero__(self) -> Hero | None:
+        return self.__heros__.sprites()[0]
+
     def __check_win__(self) -> bool:
         return not len(self.__enemies__)
 
     def __check_lose__(self) -> bool:
-        return not self.__lives__.get_lives()
+        return not len(self.__heros__)
 
     def __end__(self, phrase: str) -> None:
-        self.__all_sprites__.empty()
-        self.__draw_end__(phrase)
-
-    def __draw_end__(self, phase: str):
-        phrase_text = Text.generate(phase)
-        rect = phrase_text.get_rect()
-        rect.center = self.__screen__.get_rect().center
-        rect.centerx = LEVEL_WIDTH / 2 + SCREEN_MARGIN
-        rect.y -= SPRITE_SIZE
-        self.__screen__.blit(phrase_text, rect)
+        evt = custom_event(CustomEventsTypes.CHANGE_SCREEN,
+                           phrase, screen="end")
+        emit_event(evt)
 
     def __draw_border__(self) -> None:
         top_left = (SCREEN_MARGIN - BORDER_WIDTH, SCREEN_MARGIN - BORDER_WIDTH)
