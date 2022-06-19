@@ -8,6 +8,9 @@ from utils.loaders import sound_loader
 
 
 def load_musics() -> None:
+    """
+    Функция для загрузки нужных звуков и сохранения их в сущностях
+    """
     HeroBullet.set_music("shoot", sound_loader.load("shoot.wav"))
     Enemy.set_music("destroy", sound_loader.load("invaderkilled.wav"))
     Enemy.set_music("step", sound_loader.load("fastinvader1.wav"))
