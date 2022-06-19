@@ -1,5 +1,5 @@
 from time import time
-from typing import Dict, List
+from typing import List
 from pygame import Surface, mixer, transform, sprite
 from consts.main import STEP
 from entities.bullet import Bullet
@@ -11,7 +11,6 @@ from consts import LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, BulletType
 
 @Injector.inject(ScoresStore, "__scores__")
 class Enemy(Entity):
-    __injected__: Dict[str, object]
     __scores__: ScoresStore
     __move_timeout__: float = 1
 
@@ -36,8 +35,6 @@ class Enemy(Entity):
         self.__last_move__ = time()
 
         self.__score__ = score
-
-        self.__scores__ = self.__injected__.get("__scores__")
 
     def update(self) -> None:
         if self.__collide__():

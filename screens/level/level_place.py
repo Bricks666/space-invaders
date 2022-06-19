@@ -1,5 +1,4 @@
 from random import randint
-from typing import Dict
 from time import time
 from pygame import K_LEFT, K_RIGHT, K_SPACE, K_a, K_d, Surface, display, Rect, key
 from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, BORDER_COLOR
@@ -19,7 +18,6 @@ from utils.generate_level import generate_level
 @Injector.inject(LivesStore, "__lives__")
 @Injector.inject(LevelStore, "__levels__")
 class LevelPlace(ScreenPart):
-    __injected__: Dict[str, object]
     __enemies__: Group[Enemy]
     __heros__: Group[Hero]
     __scores__: ScoresStore
@@ -30,10 +28,6 @@ class LevelPlace(ScreenPart):
         rect = Rect(SCREEN_MARGIN, SCREEN_MARGIN, LEVEL_WIDTH, LEVEL_HEIGHT)
         super().__init__(screen, rect)
         self.__enemies__ = Group[Enemy]()
-
-        self.__scores__ = self.__injected__.get("__scores__")
-        self.__levels__ = self.__injected__.get("__levels__")
-        self.__lives__ = self.__injected__.get("__lives__")
 
     def update(self) -> None:
         if self.__check_lose__():

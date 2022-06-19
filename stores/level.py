@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import List, Optional
 from database import DB
 from models import LevelModel
 from packages.inject import Injector
@@ -9,14 +9,12 @@ from packages.inject import Injector
 class LevelStore:
     __levels__: List[LevelModel]
     __current_level__: Optional[LevelModel]
-    __injected__: Dict[str, object]
     __db__: DB
     __levels_count__: int
 
     def __init__(self) -> None:
         self.__levels__ = []
         self.__current_level__ = None
-        self.__db__ = self.__injected__.get("__db__")
 
     def get_levels(self) -> List[LevelModel]:
         return self.__levels__

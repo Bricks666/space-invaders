@@ -10,7 +10,6 @@ from packages.inject import Injector
 
 @Injector.inject(LivesStore, "__lives__")
 class Hero(Entity):
-    __injected__: Dict[str, object]
     __lives__: LivesStore
 
     def __init__(self, x: float, y: float, groups: List[sprite.Group]) -> None:
@@ -26,8 +25,6 @@ class Hero(Entity):
         self.__speed__ = STEP
 
         self.__last_fire__ = 0
-
-        self.__lives__ = self.__injected__.get("__lives__")
 
     def update(self) -> None:
         if self.__collide__():

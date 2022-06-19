@@ -1,4 +1,3 @@
-from typing import Dict
 import pygame
 from packages.core import StateMachine, ScreenPart
 from screens.level.level_place import LevelPlace
@@ -12,7 +11,6 @@ from stores.scores import ScoresStore
 @Injector.inject(LivesStore, "__lives__")
 @Injector.inject(ScoresStore, "__scores__")
 class LevelsMachine(StateMachine[int], ScreenPart):
-    __injected__: Dict[str, object]
     __levels__: LevelStore
     __lives__: LivesStore
     __scores__: ScoresStore
@@ -20,10 +18,6 @@ class LevelsMachine(StateMachine[int], ScreenPart):
     def __init__(self, screen: pygame.Surface) -> None:
         super().__init__(screen)
         ScreenPart.__init__(self, screen)
-
-        self.__levels__ = self.__injected__.get("__levels__")
-        self.__lives__ = self.__injected__.get("__lives__")
-        self.__scores__ = self.__injected__.get("__scores__")
 
     def change_state(self, level_id: int) -> None:
         current_level = self.__levels__.change_level(level_id)

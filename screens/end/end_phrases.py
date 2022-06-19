@@ -1,4 +1,3 @@
-from typing import Dict
 from pygame import Rect, Surface
 from components.button import Button
 from consts import SPRITE_SIZE
@@ -13,15 +12,12 @@ from stores.level import LevelStore
 
 @Injector.inject(ScoresStore, "__scores__")
 class EndPhrases(ScreenPart):
-    __injected__: Dict[str, object]
     __scores__: ScoresStore
 
     def __init__(self, screen: Surface) -> None:
         rect = Rect(SCREEN_MARGIN, SCREEN_MARGIN,
                     CONTENT_WIDTH, CONTENT_HEIGHT)
         super().__init__(screen, rect)
-
-        self.__scores__ = self.__injected__.get("__scores__")
 
     def activate(self, text: str, *args, **kwargs) -> None:
         self.__create_text__(text)

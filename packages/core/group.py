@@ -6,6 +6,11 @@ TGT = TypeVar("TGT", bound=sprite.Sprite)
 
 
 class Group(Generic[TGT], sprite.Group):
+    """
+    Надстройка над группой из библиотеки
+
+    Нужна, чтобы возвращать типизированные объекты
+    """
 
     def __init__(self, *sprites: TGT) -> None:
         super().__init__(*sprites)
@@ -22,18 +27,5 @@ class Group(Generic[TGT], sprite.Group):
     def has(self, *sprites: TGT) -> bool:
         return super().has(*sprites)
 
-    def kill(self) -> None:
-        for sprite in self.sprites():
-            sprite.kill()
-
     def __iter__(self) -> Iterator[TGT]:
         return super().__iter__()
-
-    @staticmethod
-    def get_by_class(sprites: sprite.Group, cls: TGT) -> 'Group[TGT]':
-        group = Group[TGT]()
-
-        for s in sprites:
-            if isinstance(s, cls):
-                group.add(s)
-        return group

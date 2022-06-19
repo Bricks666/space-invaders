@@ -1,4 +1,3 @@
-from typing import Dict
 from pygame import Rect, Surface
 from consts.sizes import HEIGHT, CONTENT_HEIGHT, CONTENT_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, WIDTH
 from models.level import LevelModel
@@ -11,7 +10,6 @@ from components.button import Button
 
 @Injector.inject(LevelStore, "__levels__")
 class List(ScreenPart):
-    __injected__: Dict[str, object]
     __levels__: LevelStore
 
     def __init__(self, screen: Surface) -> None:
@@ -19,7 +17,6 @@ class List(ScreenPart):
                     CONTENT_WIDTH - SCREEN_MARGIN * 2, CONTENT_HEIGHT - SCREEN_MARGIN * 2.5)
         super().__init__(screen, rect)
 
-        self.__levels__ = self.__injected__.get("__levels__")
         self.__levels__.fetch_levels()
 
     def activate(self, *args, **kwargs) -> None:

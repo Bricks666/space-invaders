@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Optional
 from database import DB
 from packages.inject import Injector
 
@@ -10,13 +10,11 @@ class ScoresStore:
     __value__: int
     __level_id__: Optional[int]
     __db__: DB
-    __injected__: Dict
 
     def __init__(self) -> None:
         self.__max_scores__ = 0
         self.__value__ = 0
         self.__level_id__ = None
-        self.__db__ = self.__injected__.get("__db__")
 
     def fetch_max_scores(self, level_id: int) -> None:
         self.__level_id__ = level_id

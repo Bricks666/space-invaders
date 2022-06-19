@@ -1,7 +1,6 @@
 from abc import abstractmethod
 from enum import Enum
-from pygame import Surface, mixer
-from typing import Dict, Final, final
+from typing import Final, final
 from packages.core.collidable import Collidable
 
 
@@ -18,10 +17,15 @@ class Entity(Collidable):
     Интерфейс для сущности
     """
     __speed__: float = 0
+    """
+    Скорость перемещения сущности
+    """
 
     @abstractmethod
     def fire(self) -> None:
         """
+        Метод для стрельбы
+
         Должен быть реализован у потомка
         """
         pass
@@ -29,6 +33,8 @@ class Entity(Collidable):
     @abstractmethod
     def move(self) -> None:
         """
+        Метод для передвижения сущности
+
         Должен быть реализован у потомка
         """
         pass

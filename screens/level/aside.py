@@ -1,4 +1,3 @@
-from typing import Dict
 from pygame import Surface, Rect
 from consts import ASIDE_BAR_WIDTH, BORDER_WIDTH, HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
 from components import Text
@@ -12,7 +11,6 @@ from stores.scores import ScoresStore
 @Injector.inject(ScoresStore, "__scores__")
 @Injector.inject(LivesStore, "__lives__")
 class Aside(ScreenPart):
-    __injected__: Dict[str, object]
     __scores__: ScoresStore
     __lives__: LivesStore
     __margin__: float = SPRITE_SIZE / 2
@@ -24,9 +22,6 @@ class Aside(ScreenPart):
         super().__init__(screen, rect)
 
         self.__live_sprites__ = Group[Live]()
-
-        self.__scores__ = self.__injected__.get("__scores__")
-        self.__lives__ = self.__injected__.get("__lives__")
 
     def update(self) -> None:
         self.__validate_lives__()
