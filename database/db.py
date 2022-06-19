@@ -1,8 +1,8 @@
 from sqlite3 import connect
 import sqlite3
 from typing import Optional
-from database.levels import LevelsTable
-from database.scores import ScoresTable
+from .levels import LevelsTable
+from .scores import ScoresTable
 from packages.inject import Injector
 
 

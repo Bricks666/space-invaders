@@ -1,7 +1,7 @@
 import sqlite3
 from typing import Final, Tuple
-from database.levels import LevelsTable
-from database.table import Table
+from .levels import LevelsTable
+from .table import Table
 from models import ScoreModel
 
 

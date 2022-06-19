@@ -1,2 +1,2 @@
-from models.level import *
-from models.scores import *
+from .level import *
+from .scores import *

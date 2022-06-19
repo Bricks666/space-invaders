@@ -24,6 +24,9 @@ class Game:
         self.__screens_machine__ = ScreensMachine(self.__screen__)
 
     def start(self):
+        """
+        Основной цикл событий
+        """
         clock = time.Clock()
         while True:
             self.__screen__.fill(BG_COLOR)

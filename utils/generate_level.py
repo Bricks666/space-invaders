@@ -3,7 +3,7 @@ from consts import SCREEN_MARGIN, SPRITE_SIZE,  EntityCodes
 from entities.hero import Hero
 from entities.enemy import Enemy
 from packages.core import Group
-from utils.loaders import level_loader
+from .loaders import level_loader
 from pygame import sprite
 
 

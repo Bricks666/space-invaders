@@ -1,8 +1,8 @@
 from typing import Dict, Generic, Optional, TypeVar, Union
 from pygame import Surface
-from packages.core.activate import Activate
-from packages.core.screen import Screen
-from packages.core.screen_part import ScreenPart
+from .activate import Activate
+from .screen import Screen
+from .screen_part import ScreenPart
 
 
 MT = TypeVar("MT")

@@ -1,7 +1,7 @@
 from typing import Dict, List
 from pygame import Surface, mixer
-from packages.core.activate import Activate
-from packages.core.screen_part import ScreenPart
+from .activate import Activate
+from .screen_part import ScreenPart
 
 
 class Screen(Activate):

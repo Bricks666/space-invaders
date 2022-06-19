@@ -1,6 +1,6 @@
 from pygame import Rect, Surface, sprite
-from packages.core.activate import Activate
-from packages.core.group import Group
+from .activate import Activate
+from .group import Group
 
 
 class ScreenPart(Activate):

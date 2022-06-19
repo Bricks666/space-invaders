@@ -1,6 +1,6 @@
 import sqlite3
 from typing import List, Optional, Tuple
-from database.table import Table
+from .table import Table
 from models import LevelModel
 
 

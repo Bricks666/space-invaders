@@ -40,21 +40,21 @@ class EndPhrases(ScreenPart):
         return super().update(data, *args)
 
     def __create_text__(self, text: str) -> None:
-        end_text = Text(text, 0, 0, "large")
-        score_text = Text("Ваши очки: {score} POINTS", 0, 0)
-        max_score_text = Text(
+        end = Text(text, 0, 0, "large")
+        score = Text("Ваши очки: {score} POINTS", 0, 0)
+        max_score = Text(
             "Максимальное количество очков на уровне: {max_score} POINTS", 0, 0)
 
-        exit_text = Button("Выйти в меню", 0, 0, lambda: emit_event(
+        menu = Button("Выйти в меню", 0, 0, lambda: emit_event(
             custom_event(CustomEventsTypes.CHANGE_SCREEN, screen="menu")))
 
-        score_text.rect.center = self.rect.center
-        max_score_text.rect.center = self.rect.center
-        end_text.rect.center = self.rect.center
-        exit_text.rect.center = self.rect.center
-        end_text.rect.y -= SPRITE_SIZE
-        max_score_text.rect.y += SPRITE_SIZE
-        exit_text.rect.y += self.rect.bottom
+        score.rect.center = self.rect.center
+        max_score.rect.center = self.rect.center
+        end.rect.center = self.rect.center
+        menu.rect.center = self.rect.center
+        end.rect.y -= SPRITE_SIZE
+        max_score.rect.y += SPRITE_SIZE
+        menu.rect.y = self.rect.bottom - SPRITE_SIZE
 
         self.__all_sprites__.add(
-            max_score_text, score_text, end_text, exit_text)
+            max_score, score, end, menu)

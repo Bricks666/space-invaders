@@ -1,6 +1,6 @@
 from typing import Dict
 from components.text import Text, _FontSizes
-from utils.loaders import font_loader
+from .loaders import font_loader
 
 size_to_pixels: Dict[_FontSizes, int] = {
     "small": 14,

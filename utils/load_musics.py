@@ -4,7 +4,7 @@ from entities.hero import Hero, HeroBullet
 from screens.level import Level
 from screens.levels import Levels
 from screens.menu import Menu
-from utils.loaders import sound_loader
+from .loaders import sound_loader
 
 
 def load_musics() -> None:

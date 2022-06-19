@@ -1,6 +1,6 @@
 from time import time
 from typing import List
-from pygame import Surface, mixer, transform, sprite
+from pygame import Surface,  transform, sprite
 from consts.main import STEP
 from entities.bullet import Bullet
 from packages.core import Direction, Entity

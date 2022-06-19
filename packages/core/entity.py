@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from enum import Enum
 from typing import Final, final
-from packages.core.collidable import Collidable
+from .collidable import Collidable
 
 
 @final

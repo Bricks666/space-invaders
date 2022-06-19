@@ -1,1 +1,1 @@
-from screens.end.end import End
+from .end import End

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Final, List
 from pygame import sprite
 
-from packages.core.sprite import Sprite
+from .sprite import Sprite
 
 
 collidable = sprite.Group()

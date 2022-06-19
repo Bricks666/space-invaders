@@ -1,6 +1,6 @@
 from entities.enemy import Enemy
 from entities.hero import Hero
-from utils.loaders import sprite_loader
+from .loaders import sprite_loader
 
 
 def load_images() -> None:
