@@ -2,7 +2,6 @@ from typing import Final, Tuple
 
 
 SPRITE_SIZE: Final[int] = 64
-BULLET_SIZE: Final[Tuple[int, int]] = (10, 20)
 
 ROW_COUNT: Final[int] = 12
 COLUMN_COUNT: Final[int] = 14
@@ -18,3 +17,7 @@ CONTENT_HEIGHT: Final[int] = LEVEL_HEIGHT
 WIDTH: Final[int] = CONTENT_WIDTH + SCREEN_MARGIN * 2
 HEIGHT: Final[int] = CONTENT_HEIGHT + SCREEN_MARGIN * 2
 BORDER_WIDTH: Final[int] = 5
+
+"""
+Константы, описывающие размеры в игре
+"""

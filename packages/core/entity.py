@@ -16,9 +16,9 @@ class Entity(Collidable):
     """
     Интерфейс для сущности
     """
-    __speed__: float = 0
+    __velocity__: float = 0
     """
-    Скорость перемещения сущности
+    Векторная скорость перемещения сущности
     """
 
     @abstractmethod
