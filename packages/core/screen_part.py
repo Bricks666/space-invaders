@@ -1,4 +1,4 @@
-from pygame import Surface, sprite
+from pygame import Rect, Surface, sprite
 from packages.core.activate import Activate
 from packages.core.group import Group
 
@@ -7,9 +7,10 @@ class ScreenPart(Activate):
     __all_sprites__: Group[sprite.Sprite]
     __screen__: Surface
 
-    def __init__(self, screen: Surface) -> None:
+    def __init__(self, screen: Surface, rect: Rect) -> None:
         self.__all_sprites__ = Group[sprite.Sprite]()
         self.__screen__ = screen
+        self.rect = rect
 
     def update(self, *args) -> None:
         self.__all_sprites__.update(*args)

@@ -1,6 +1,6 @@
 from typing import Dict
 from pygame import Rect, Surface
-from consts.sizes import HEIGHT, SCREEN_MARGIN, SPRITE_SIZE, WIDTH
+from consts.sizes import HEIGHT, CONTENT_HEIGHT, CONTENT_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, WIDTH
 from models.level import LevelModel
 from packages.events import CustomEventsTypes, custom_event, emit_event
 from packages.inject import Injector
@@ -15,9 +15,9 @@ class List(ScreenPart):
     __levels__: LevelStore
 
     def __init__(self, screen: Surface) -> None:
-        super().__init__(screen)
-        self.rect = Rect(SCREEN_MARGIN * 2, SCREEN_MARGIN * 2.5,
-                         WIDTH - SCREEN_MARGIN * 4, HEIGHT - SCREEN_MARGIN * 4.5)
+        rect = Rect(SCREEN_MARGIN * 2, SCREEN_MARGIN * 2.5,
+                    CONTENT_WIDTH - SCREEN_MARGIN * 2, CONTENT_HEIGHT - SCREEN_MARGIN * 2.5)
+        super().__init__(screen, rect)
 
         self.__levels__ = self.__injected__.get("__levels__")
         self.__levels__.fetch_levels()
