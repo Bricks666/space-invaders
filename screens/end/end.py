@@ -4,6 +4,9 @@ from screens.end.end_header import EndHeader
 
 
 class End(Screen):
+    """
+    Экран окончания игры
+    """
     def activate(self, *args, **kwargs) -> None:
         self.__parts__.append(EndPhrases(self.__screen__))
         self.__parts__.append(EndHeader(self.__screen__))

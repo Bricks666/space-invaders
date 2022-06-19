@@ -3,6 +3,11 @@ from pygame import Surface, sprite, mixer
 
 
 class Sprite(sprite.Sprite):
+    """
+    Класс-надстройка над pygame-спрайтом
+
+    Добавляет музыку и изображения к нему
+    """
     __musics__: Dict[str, mixer.Sound] = {}
     __images__: Dict[str, Surface] = {}
 

@@ -1,1 +1,1 @@
-from screens.level.level import Level
+from .level import Level

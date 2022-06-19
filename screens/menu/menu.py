@@ -1,15 +1,18 @@
-from pygame import KEYDOWN, K_l, Surface,  event, key
+from pygame import Surface
 from components import Header
 from consts.main import GAME_NAME
 from packages.core import Screen
-from packages.events import CustomEventsTypes, custom_event, emit_event
-from screens.menu.navigation import Navigation
+from .navigation import Navigation
 
 
 class Menu(Screen):
+    """
+    Экран стартового меню
+    """
+
     def __init__(self, screen: Surface) -> None:
         super().__init__(screen)
-        self.__musics__.get("game_start").set_volume(0.05)
+        self.__musics__.get("game_start").set_volume(0.2)
 
     def activate(self, *args, **kwargs) -> None:
         self.__musics__.get("game_start").play(-1)
@@ -20,12 +23,3 @@ class Menu(Screen):
     def inactivate(self, *args, **kwargs) -> None:
         self.__musics__.get("game_start").stop()
         return super().inactivate(*args, **kwargs)
-
-    def __control_events__(self) -> None:
-        for evt in event.get(KEYDOWN):
-            if evt.type == KEYDOWN:
-                keys = key.get_pressed()
-                if keys[K_l]:
-                    evt = custom_event(
-                        CustomEventsTypes.CHANGE_SCREEN, screen="levels")
-                    emit_event(evt)

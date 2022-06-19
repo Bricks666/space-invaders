@@ -1,3 +1,3 @@
-from consts.main import *
-from consts.colors import *
-from consts.sizes import *
+from .main import *
+from .colors import *
+from .sizes import *

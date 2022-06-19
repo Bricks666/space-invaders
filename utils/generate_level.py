@@ -8,6 +8,9 @@ from pygame import sprite
 
 
 def generate_level(level_path: str) -> Tuple[Group[sprite.Sprite], Group[Enemy], Group[Hero]]:
+    """
+    Функция чтения файла уровня и создания на его основе сущностей
+    """
     sprite_codes = level_loader.load(level_path)
     all_sprites = Group[sprite.Group]()
     enemies = Group[Enemy]()

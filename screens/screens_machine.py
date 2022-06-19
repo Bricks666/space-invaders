@@ -8,9 +8,16 @@ from screens.menu import Menu
 from screens.rules import Rules
 
 _ScenesType = Literal["menu", "level", "end", "levels", "rules"]
+"""
+Возможные сцены
+"""
 
 
 class ScreensMachine(StateMachine[_ScenesType]):
+    """
+    Реализация машины состояния для управления текущей сценой
+    """
+
     def __init__(self, screen: Surface) -> None:
         super().__init__(screen)
 
@@ -21,3 +28,6 @@ class ScreensMachine(StateMachine[_ScenesType]):
             "levels": Levels(screen),
             "rules": Rules(screen)
         }
+        """
+        Создание сцен игры
+        """

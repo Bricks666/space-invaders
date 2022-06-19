@@ -16,14 +16,12 @@ class Game:
     Основной объект игры
     Занимает поверхностным менеджментом игровых процессов
     """
-    __injected__: Dict[str, object]
     __db__: DB
     __screens_machine__: ScreensMachine
 
     def __init__(self, screen: Surface) -> None:
         self.__screen__ = screen
         self.__screens_machine__ = ScreensMachine(self.__screen__)
-        self.__db__ = self.__injected__.get("__db__")
 
     def start(self):
         clock = time.Clock()

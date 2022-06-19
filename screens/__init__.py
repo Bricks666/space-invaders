@@ -1,1 +1,1 @@
-from screens.screens_machine import ScreensMachine
+from .screens_machine import ScreensMachine

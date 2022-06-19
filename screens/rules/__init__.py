@@ -1,1 +1,1 @@
-from screens.rules.rules import Rules
+from .rules import Rules

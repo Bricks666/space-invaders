@@ -1,1 +1,1 @@
-from screens.menu.menu import Menu
+from .menu import Menu

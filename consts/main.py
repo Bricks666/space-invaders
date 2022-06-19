@@ -24,3 +24,6 @@ STEP: Final[int] = 4
 UNICODE_NUMBER_OFFSET: Final[int] = 48
 
 GAME_NAME: Final[str] = "Space Invaders"
+"""
+Остальные константы игры
+"""

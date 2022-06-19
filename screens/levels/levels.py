@@ -1,10 +1,13 @@
 from pygame import Surface
 from packages.core import Screen
-from screens.levels.level_header import LevelHeader
-from screens.levels.list import List
+from .level_header import LevelHeader
+from .list import List
 
 
 class Levels(Screen):
+    """
+    Экран выбора уровня
+    """
 
     def __init__(self, screen: Surface) -> None:
         super().__init__(screen)

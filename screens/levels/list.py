@@ -1,30 +1,36 @@
-from typing import Dict
 from pygame import Rect, Surface
-from consts.sizes import HEIGHT, CONTENT_HEIGHT, CONTENT_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, WIDTH
-from models.level import LevelModel
+from consts.sizes import CONTENT_HEIGHT, CONTENT_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, WIDTH
+from models import LevelModel
 from packages.events import CustomEventsTypes, custom_event, emit_event
 from packages.inject import Injector
 from stores.level import LevelStore
 from packages.core import ScreenPart, Group
-from components.button import Button
+from components import Button
 
 
 @Injector.inject(LevelStore, "__levels__")
 class List(ScreenPart):
-    __injected__: Dict[str, object]
+    """
+    Список уровней
+    """
     __levels__: LevelStore
 
     def __init__(self, screen: Surface) -> None:
         rect = Rect(SCREEN_MARGIN * 2, SCREEN_MARGIN * 2.5,
                     CONTENT_WIDTH - SCREEN_MARGIN * 2, CONTENT_HEIGHT - SCREEN_MARGIN * 2.5)
+        """
+        Такие размеры учитываю положение заголовка на экране
+        """
         super().__init__(screen, rect)
 
-        self.__levels__ = self.__injected__.get("__levels__")
         self.__levels__.fetch_levels()
 
     def activate(self, *args, **kwargs) -> None:
         levels = self.__levels__.get_levels()
         level_row_count = (WIDTH - SCREEN_MARGIN * 4) // SPRITE_SIZE
+        """
+        Под каждую кнопку уровня выделяется один спрайт площади
+        """
         level_sprites: Group[Button] = Group()
         for i in range(len(levels)):
             level_sprites.add(self.__create_level_button__(
@@ -34,6 +40,11 @@ class List(ScreenPart):
         return super().activate(*args, **kwargs)
 
     def __create_level_button__(self, level: LevelModel, i: int, level_row_count: float) -> Button:
+        """
+        Функция создания кнопки уровня
+
+        Используется для создания замыкания обработчика
+        """
         x = self.rect.x + i % level_row_count * SPRITE_SIZE
         y = self.rect.y + i // level_row_count * SPRITE_SIZE
 

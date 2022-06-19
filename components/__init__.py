@@ -1,3 +1,4 @@
-from components.text import Text
-from components.button import Button
-from components.header import Header
+from .text import Text
+from .button import Button
+from .header import Header
+from .primitive import Primitive
