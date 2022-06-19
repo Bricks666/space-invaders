@@ -2,7 +2,7 @@ from typing import Optional
 from pygame import Rect, Surface
 from consts.sizes import CONTENT_WIDTH, SCREEN_MARGIN
 from packages.core import ScreenPart
-from components.text import Text
+from .text import Text
 
 
 class Header(ScreenPart):
@@ -33,6 +33,9 @@ class Header(ScreenPart):
         return super().activate(*args, **kwargs)
 
     def __create_header__(self) -> None:
+        """
+        Метод создающий заголовок
+        """
         header = Text(self.__text__, 0, 0, "large")
         header.rect.center = self.rect.center
         self.__all_sprites__.add(header)

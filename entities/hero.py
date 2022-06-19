@@ -29,6 +29,7 @@ class Hero(Entity):
     def __init__(self, x: float, y: float, groups: List[sprite.Group]) -> None:
         super().__init__(*groups)
         self.image = self.__images__.get("hero")
+        self.__musics__.get("explosion").set_volume(0.2)
 
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -48,7 +49,7 @@ class Hero(Entity):
         """
         Уменьшение количества жизней
         """
-        self.__musics__.get("explosion").play().set_volume(0.2)
+        self.__musics__.get("explosion").play()
 
         if not self.__lives__.get_lives():
             """
@@ -56,7 +57,7 @@ class Hero(Entity):
             """
             return super().kill()
 
-        self.rect.move(self.__start_position__)
+        self.rect.topleft = self.__start_position__
 
     def move(self, direction: Direction) -> None:
         if self.__can_move__(direction):

@@ -1,10 +1,10 @@
 from random import randint
 from time import time
 from pygame import K_LEFT, K_RIGHT, K_SPACE, K_a, K_d, Surface, display, Rect, key
+from components import Primitive
 from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, BORDER_COLOR
 from entities.hero import Hero
-from packages.core import ScreenPart, Group, Collidable
-from packages.core.entity import Direction
+from packages.core import ScreenPart, Group, Collidable, Direction
 from packages.events import CustomEventsTypes, custom_event,  emit_event
 from packages.inject import Injector
 from entities.enemy import Enemy
@@ -18,11 +18,29 @@ from utils.generate_level import generate_level
 @Injector.inject(LivesStore, "__lives__")
 @Injector.inject(LevelStore, "__levels__")
 class LevelPlace(ScreenPart):
+    """
+    Площадка уровня с игроком и врагами
+    """
     __enemies__: Group[Enemy]
+    """
+    Группа врагов на уровне
+    """
     __heros__: Group[Hero]
+    """
+    Группа игроков на уровне
+    """
     __scores__: ScoresStore
+    """
+    Хранилище очков
+    """
     __levels__: LevelStore
+    """
+    Хранилище уровней
+    """
     __lives__: LivesStore
+    """
+    Хранилище жизней
+    """
 
     def __init__(self, screen: Surface) -> None:
         rect = Rect(SCREEN_MARGIN, SCREEN_MARGIN, LEVEL_WIDTH, LEVEL_HEIGHT)
@@ -50,10 +68,6 @@ class LevelPlace(ScreenPart):
         self.__fire_enemy__()
         super().update()
 
-    def draw(self) -> None:
-        self.__draw_border__()
-        return super().draw()
-
     def activate(self, level_id: int) -> None:
         current_level = self.__levels__.change_level(level_id)
         self.__lives__.fetch_lives(level_id)
@@ -67,12 +81,16 @@ class LevelPlace(ScreenPart):
         display.set_caption(
             f"{GAME_NAME} - level: {current_level.level_name}")
 
+        self.__create_border__()
+
         return super().activate()
 
     def inactivate(self) -> None:
         self.__enemies__.empty()
         Collidable.reset_collidable()
-
+        """
+        Чтобы эти модели не мешались на других уровнях
+        """
         self.__scores__.save()
 
         return super().inactivate()
@@ -93,9 +111,15 @@ class LevelPlace(ScreenPart):
         return self.__heros__.sprites()[0]
 
     def __check_win__(self) -> bool:
+        """
+        Уровень считается выигранным, если не осталось врагов
+        """
         return not len(self.__enemies__)
 
     def __check_lose__(self) -> bool:
+        """
+        Если игрок умер, то он проиграл
+        """
         return not len(self.__heros__)
 
     def __end__(self, phrase: str) -> None:
@@ -103,16 +127,21 @@ class LevelPlace(ScreenPart):
                            phrase, screen="end")
         emit_event(evt)
 
-    def __draw_border__(self) -> None:
+    def __create_border__(self) -> None:
+        """
+        Метод создающий рамку вокруг уровня
+        """
         top_left = (SCREEN_MARGIN - BORDER_WIDTH, SCREEN_MARGIN - BORDER_WIDTH)
         top_right = (SCREEN_MARGIN + LEVEL_WIDTH, SCREEN_MARGIN - BORDER_WIDTH)
         bottom_left = (SCREEN_MARGIN,
                        SCREEN_MARGIN + LEVEL_HEIGHT)
-        self.__screen__.fill(BORDER_COLOR,
-                             Rect(top_left, (LEVEL_WIDTH + BORDER_WIDTH, BORDER_WIDTH)))
-        self.__screen__.fill(BORDER_COLOR,
-                             Rect(top_right, (BORDER_WIDTH, LEVEL_HEIGHT + BORDER_WIDTH * 2)))
-        self.__screen__.fill(BORDER_COLOR,
-                             Rect(bottom_left, (LEVEL_WIDTH, BORDER_WIDTH)))
-        self.__screen__.fill(BORDER_COLOR,
-                             Rect(top_left, (BORDER_WIDTH, LEVEL_HEIGHT + BORDER_WIDTH)))
+        top = Rect(*top_left, LEVEL_WIDTH + BORDER_WIDTH, BORDER_WIDTH)
+        right = Rect(top_right, (BORDER_WIDTH,
+                     LEVEL_HEIGHT + BORDER_WIDTH * 2))
+        bottom = Rect(bottom_left, (LEVEL_WIDTH, BORDER_WIDTH))
+        left = Rect(top_left, (BORDER_WIDTH, LEVEL_HEIGHT + BORDER_WIDTH * 2))
+        top = Primitive(top, BORDER_COLOR)
+        right = Primitive(right, BORDER_COLOR)
+        bottom = Primitive(bottom, BORDER_COLOR)
+        left = Primitive(left, BORDER_COLOR)
+        self.__all_sprites__.add(top, right, bottom, left)

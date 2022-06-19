@@ -6,6 +6,10 @@ from components import Text
 
 
 class RulesList(ScreenPart):
+    """
+    Список правил
+    """
+
     def __init__(self, screen: Surface) -> None:
         rect = Rect(SCREEN_MARGIN, SCREEN_MARGIN * 2.5,
                     CONTENT_WIDTH, CONTENT_HEIGHT - SCREEN_MARGIN * 2.5)

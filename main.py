@@ -2,7 +2,6 @@ from pygame import init, mixer, font, display, mouse, cursors
 from consts import HEIGHT, WIDTH
 from game import Game
 from packages.inject import Injector
-import pygame.examples.aliens
 
 from utils.load_fonts import load_fonts
 from utils.load_images import load_images

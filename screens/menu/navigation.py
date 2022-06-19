@@ -1,14 +1,16 @@
 from pygame import Rect, Surface, event
 import pygame
-from components.button import Button
-from components.text import Text
-from consts.main import GAME_NAME
+from components import Button
 from consts.sizes import CONTENT_HEIGHT, CONTENT_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
 from packages.core import ScreenPart
 from packages.events import CustomEventsTypes, custom_event, emit_event
 
 
 class Navigation(ScreenPart):
+    """
+    Навигация главного меню
+    """
+
     def __init__(self, screen: Surface) -> None:
         rect = Rect(SCREEN_MARGIN, SCREEN_MARGIN,
                     CONTENT_WIDTH, CONTENT_HEIGHT)
@@ -22,7 +24,9 @@ class Navigation(ScreenPart):
         return super().inactivate(*args, **kwargs)
 
     def __create_text__(self) -> None:
-
+        """
+        Метод создающий навигационные элементы
+        """
         play = Button(
             "Играть", 0, 0,
             lambda: emit_event(custom_event(
@@ -42,5 +46,4 @@ class Navigation(ScreenPart):
         play.rect.move_ip(0, -SPRITE_SIZE * 0.5)
         exit.rect.move_ip(0, SPRITE_SIZE * 0.5)
 
-        self.__all_sprites__.add(
-            play, exit, rules)
+        self.__all_sprites__.add(play, exit, rules)

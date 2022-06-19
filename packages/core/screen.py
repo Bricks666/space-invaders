@@ -24,19 +24,39 @@ class Screen(Activate):
         self.__parts__ = []
 
     def draw(self, *args) -> None:
+        """
+        Метод отрисовки экрана
+
+        Отрисовывает все части экрана
+        """
         for part in self.__parts__:
             part.draw(*args)
 
     def update(self) -> None:
+        """
+        Метод обновления экрана
+
+        Обновляет все части экрана и контролирует события
+        """
         self.__control_events__()
         for part in self.__parts__:
             part.update()
 
     def activate(self, *args, **kwargs) -> None:
+        """
+        Метод для активации экрана
+
+        Активирует все свои части
+        """
         for part in self.__parts__:
             part.activate(*args, **kwargs)
 
     def inactivate(self, *args, **kwargs) -> None:
+        """
+        Метод дезактивации экрана
+
+        Дезактивирует все свои части и очищает их список
+        """
         for part in self.__parts__:
             part.inactivate(*args, **kwargs)
         self.__parts__.clear()

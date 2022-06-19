@@ -57,8 +57,8 @@ class Enemy(Entity):
         self.rect.x = x
         self.rect.y = y
 
-        self.__musics__.get('step').set_volume(0.1)
-        self.__musics__.get("destroy").set_volume(0.1)
+        self.__musics__.get('step').set_volume(0.5)
+        self.__musics__.get("destroy").set_volume(0.5)
 
         self.__offset_right__ = SPRITE_SIZE * (total_count - number)
         self.__offset_left__ = SPRITE_SIZE * number

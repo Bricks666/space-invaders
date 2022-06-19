@@ -1,7 +1,7 @@
 from typing import Callable, Dict, Union
-from components.text import Text, _FontSizes
+from .text import Text, _FontSizes
 from consts.colors import BORDER_COLOR, TEXT_COLOR
-from pygame import SYSTEM_CURSOR_CROSSHAIR, SYSTEM_CURSOR_HAND, mouse, cursors, mixer, time
+from pygame import SYSTEM_CURSOR_HAND, mouse, cursors, mixer, time
 
 _THandler = Callable[['Button'], None]
 

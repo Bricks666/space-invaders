@@ -19,7 +19,7 @@ class Bullet(Collidable):
 
     def __init__(self, image: Surface, x: float, y: float, velocity: float, groups: List[sprite.Group]) -> None:
         super().__init__(*groups)
-        self.__musics__.get("shoot").set_volume(0.1)
+        self.__musics__.get("shoot").set_volume(0.5)
         self.__musics__.get("shoot").play()
         self.__velocity__ = velocity
         """
