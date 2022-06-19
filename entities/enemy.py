@@ -1,6 +1,7 @@
 from time import time
 from typing import Dict, List
 from pygame import Surface, mixer, transform, sprite
+from consts.main import STEP
 from entities.bullet import Bullet
 from packages.core import Direction, Entity
 from packages.inject import Injector
@@ -12,7 +13,7 @@ from consts import LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE, BulletType
 class Enemy(Entity):
     __injected__: Dict[str, object]
     __scores__: ScoresStore
-    DURATION: float = 0.5
+    __move_timeout__: float = 1
 
     def __init__(self, x: float, y: float, number: int, total_count: int, groups: List[sprite.Group], score: int = 50) -> None:
         super().__init__(*groups)
@@ -21,6 +22,9 @@ class Enemy(Entity):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+        self.__musics__.get('step').set_volume(0.1)
+        self.__musics__.get("destroy").set_volume(0.1)
 
         self.__offset_right__ = SPRITE_SIZE * (total_count - number)
         self.__offset_left__ = SPRITE_SIZE * number
@@ -53,7 +57,7 @@ class Enemy(Entity):
             return
 
         self.__last_move__ = current_time
-
+        self.__musics__.get("step").play()
         if self.__end__:
             self.__change_direction__()
             self.rect.move_ip(0, SPRITE_SIZE / 2)
@@ -75,9 +79,7 @@ class Enemy(Entity):
         self.__end__ = False
 
     def __can_move__(self, current_time: float) -> bool:
-        return self.__last_move__ + self.DURATION <= current_time
-
-
+        return self.__last_move__ + self.__move_timeout__ <= current_time
 
     def __collide__(self) -> bool:
         return super().__collide__()
@@ -86,6 +88,7 @@ class Enemy(Entity):
 class EnemyBullet(Bullet):
     def __init__(self, image: Surface, x: float, y: float, groups: List[sprite.Group]) -> None:
         super().__init__(image, x, y, BulletType.ENEMY, groups)
+        self.__speed__ = STEP * 3
 
     def __collide__(self) -> bool:
         for s in self.__collidable__.sprites():

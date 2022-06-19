@@ -5,8 +5,9 @@ from screens.end import End
 from screens.level import Level
 from screens.levels import Levels
 from screens.menu import Menu
+from screens.rules import Rules
 
-_ScenesType = Literal["menu", "level", "end", "levels"]
+_ScenesType = Literal["menu", "level", "end", "levels", "rules"]
 
 
 class ScreensMachine(StateMachine[_ScenesType]):
@@ -17,5 +18,6 @@ class ScreensMachine(StateMachine[_ScenesType]):
             "level": Level(screen),
             "end": End(screen),
             "menu": Menu(screen),
-            "levels": Levels(screen)
+            "levels": Levels(screen),
+            "rules": Rules(screen)
         }

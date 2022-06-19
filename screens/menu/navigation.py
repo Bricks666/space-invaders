@@ -3,17 +3,16 @@ import pygame
 from components.button import Button
 from components.text import Text
 from consts.main import GAME_NAME
-from consts.sizes import HEIGHT, SCREEN_MARGIN, SPRITE_SIZE, WIDTH
+from consts.sizes import CONTENT_HEIGHT, CONTENT_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
 from packages.core import ScreenPart
 from packages.events import CustomEventsTypes, custom_event, emit_event
 
 
-class MenuPart(ScreenPart):
+class Navigation(ScreenPart):
     def __init__(self, screen: Surface) -> None:
-        super().__init__(screen)
-
-        self.rect = Rect(SCREEN_MARGIN, SCREEN_MARGIN,
-                         WIDTH - SCREEN_MARGIN * 2, HEIGHT - SCREEN_MARGIN * 2)
+        rect = Rect(SCREEN_MARGIN, SCREEN_MARGIN,
+                    CONTENT_WIDTH, CONTENT_HEIGHT)
+        super().__init__(screen, rect)
 
     def activate(self, *args, **kwargs) -> None:
         self.__create_text__()
@@ -23,19 +22,25 @@ class MenuPart(ScreenPart):
         return super().inactivate(*args, **kwargs)
 
     def __create_text__(self) -> None:
-        game_name_text = Text(GAME_NAME, 0, 0, "large")
 
-        level_text = Button(
-            "Уровни", 0, 0,
+        play = Button(
+            "Играть", 0, 0,
             lambda: emit_event(custom_event(
                 CustomEventsTypes.CHANGE_SCREEN, screen="levels"))
         )
-        menu_text = Button(
+
+        rules = Button(
+            "Управление", 0, 0,
+            lambda: emit_event(custom_event(
+                CustomEventsTypes.CHANGE_SCREEN, screen="rules"))
+        )
+        exit = Button(
             "Выйти", 0, 0, lambda: emit_event(event.Event(pygame.QUIT)))
 
-        level_text.rect.center = game_name_text.rect.center = \
-            menu_text.rect.center = self.rect.center
-        game_name_text.rect.y -= SPRITE_SIZE * 5
-        level_text.rect.y -= SPRITE_SIZE * 0.5
+        play.rect.center =  \
+            exit.rect.center = rules.rect.center = self.rect.center
+        play.rect.move_ip(0, -SPRITE_SIZE * 0.5)
+        exit.rect.move_ip(0, SPRITE_SIZE * 0.5)
 
-        self.__all_sprites__.add(game_name_text, level_text, menu_text)
+        self.__all_sprites__.add(
+            play, exit, rules)

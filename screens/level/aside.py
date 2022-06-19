@@ -19,9 +19,9 @@ class Aside(ScreenPart):
     __live_sprites__: Group[Live]
 
     def __init__(self, screen: Surface) -> None:
-        super().__init__(screen)
-        self.rect = Rect(LEVEL_WIDTH + SCREEN_MARGIN + BORDER_WIDTH * 2, SCREEN_MARGIN - BORDER_WIDTH,
-                         ASIDE_BAR_WIDTH, HEIGHT - SCREEN_MARGIN * 2 + BORDER_WIDTH * 2)
+        rect = Rect(LEVEL_WIDTH + SCREEN_MARGIN + BORDER_WIDTH * 2, SCREEN_MARGIN - BORDER_WIDTH,
+                    ASIDE_BAR_WIDTH, HEIGHT - SCREEN_MARGIN * 2 + BORDER_WIDTH * 2)
+        super().__init__(screen, rect)
 
         self.__live_sprites__ = Group[Live]()
 

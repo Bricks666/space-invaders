@@ -15,8 +15,7 @@ class Hero(Entity):
 
     def __init__(self, x: float, y: float, groups: List[sprite.Group]) -> None:
         super().__init__(*groups)
-        self.image = transform.scale(
-            self.__images__.get("hero"), (SPRITE_SIZE, SPRITE_SIZE))
+        self.image = self.__images__.get("hero")
 
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -37,12 +36,11 @@ class Hero(Entity):
 
     def kill(self) -> None:
         self.__lives__.decrement_lives()
+        self.__musics__.get("explosion").play().set_volume(0.2)
 
         if not self.__lives__.get_lives():
-            self.__musics__.get("kill").play()
             return super().kill()
 
-        self.__musics__.get("destroy").play()
         self.rect.x = self.__start_x__
         self.rect.y = self.__start_y__
 
@@ -55,7 +53,7 @@ class Hero(Entity):
         groups = self.groups()
         groups.pop()
         if self.__last_fire__ + FIRE_COOLDOWN <= current_time:
-            HeroBullet(self.__images__.get("hero_bullet"), self.rect.centerx, self.rect.y,
+            HeroBullet(self.__images__.get("hero_bullet"), self.rect.centerx, self.rect.y + 64 - 39,
                        groups)
             self.__last_fire__ = current_time
 
@@ -73,6 +71,7 @@ class Hero(Entity):
 class HeroBullet(Bullet):
     def __init__(self, image: Surface, x: float, y: float, groups: List[sprite.Group]) -> None:
         super().__init__(image, x, y, BulletType.HERO, groups)
+        self.__speed__ = STEP * 5
 
     def __collide__(self) -> bool:
         for s in self.__collidable__.sprites():

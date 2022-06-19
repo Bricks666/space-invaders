@@ -1,13 +1,18 @@
-from entities.bullet import Bullet
+from components.button import Button
 from entities.enemy import Enemy
-from entities.hero import Hero
+from entities.hero import Hero, HeroBullet
 from screens.level import Level
+from screens.levels import Levels
+from screens.menu import Menu
 from utils.loaders import sound_loader
 
 
 def load_musics() -> None:
-    Bullet.set_music("shoot", sound_loader.load("shoot.mp3"))
-    Enemy.set_music("destroy", sound_loader.load("enemy_destroy.wav"))
-    Hero.set_music("kill", sound_loader.load("game_over.wav"))
-    Hero.set_music("destroy", sound_loader.load("enemy_destroy.wav"))
-    Level.__musics__.update([["start", sound_loader.load("open_game.wav")]])
+    HeroBullet.set_music("shoot", sound_loader.load("shoot.wav"))
+    Enemy.set_music("destroy", sound_loader.load("invaderkilled.wav"))
+    Enemy.set_music("step", sound_loader.load("fastinvader1.wav"))
+    Hero.set_music("explosion", sound_loader.load("explosion.wav"))
+    Button.set_sound("click", sound_loader.load("button_click.wav"))
+    Menu.set_music("game_start", sound_loader.load("menu.mpeg"))
+    Levels.set_music("game_start", sound_loader.load("menu.mpeg"))
+    Level.set_music("level_start", sound_loader.load("level.wav"))

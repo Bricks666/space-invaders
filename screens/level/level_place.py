@@ -1,7 +1,7 @@
 from random import randint
-from time import time
 from typing import Dict
-from pygame import K_LEFT, K_RIGHT, K_SPACE, K_a, K_d, Surface, display, Rect, event, key
+from time import time
+from pygame import K_LEFT, K_RIGHT, K_SPACE, K_a, K_d, Surface, display, Rect, key
 from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, BORDER_COLOR
 from entities.hero import Hero
 from packages.core import ScreenPart, Group, Collidable
@@ -27,7 +27,8 @@ class LevelPlace(ScreenPart):
     __lives__: LivesStore
 
     def __init__(self, screen: Surface) -> None:
-        super().__init__(screen)
+        rect = Rect(SCREEN_MARGIN, SCREEN_MARGIN, LEVEL_WIDTH, LEVEL_HEIGHT)
+        super().__init__(screen, rect)
         self.__enemies__ = Group[Enemy]()
 
         self.__scores__ = self.__injected__.get("__scores__")

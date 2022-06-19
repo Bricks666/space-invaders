@@ -51,3 +51,8 @@ class Text(pygame.sprite.Sprite):
 
     def change_color(self, color: pygame.Color) -> None:
         self.__color__ = color
+
+    @staticmethod
+    def get_font_height(text: 'Text') -> int:
+        font = text.fonts.get(text.__size__)
+        return font.get_height()

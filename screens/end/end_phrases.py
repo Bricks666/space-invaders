@@ -3,8 +3,8 @@ from pygame import Rect, Surface
 from components.button import Button
 from consts import SPRITE_SIZE
 from components import Text
+from consts.sizes import CONTENT_HEIGHT, CONTENT_WIDTH, SCREEN_MARGIN
 from packages.core import ScreenPart
-from consts import SCREEN_MARGIN, HEIGHT, WIDTH
 from packages.events import CustomEventsTypes, custom_event, emit_event
 from packages.inject import Injector
 from stores.scores import ScoresStore
@@ -17,9 +17,9 @@ class EndPhrases(ScreenPart):
     __scores__: ScoresStore
 
     def __init__(self, screen: Surface) -> None:
-        super().__init__(screen)
-        self.rect = Rect(SCREEN_MARGIN, SCREEN_MARGIN,
-                         WIDTH - SCREEN_MARGIN * 2, HEIGHT - SCREEN_MARGIN * 2)
+        rect = Rect(SCREEN_MARGIN, SCREEN_MARGIN,
+                    CONTENT_WIDTH, CONTENT_HEIGHT)
+        super().__init__(screen, rect)
 
         self.__scores__ = self.__injected__.get("__scores__")
 
