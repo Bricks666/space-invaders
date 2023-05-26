@@ -1,6 +1,7 @@
 from typing import Dict, Literal,  Union
 import pygame
 from consts import TEXT_COLOR
+from packages.core.game_object import GameObject
 
 
 _FontSizes = Literal["small", "normal", "large"]
@@ -15,7 +16,7 @@ _ChangedType = Literal["color", "size", ""]
 """
 
 
-class Text(pygame.sprite.Sprite):
+class Text(GameObject):
     """
     Текст
 

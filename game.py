@@ -41,7 +41,7 @@ class Game:
         self.__screens_machine__.activate("menu")
 
     def quite(self) -> None:
-        self.__screens_machine__.inactivate()
+        self.__screens_machine__.deactivate()
         self.__db__.disconnect()
         font.quit()
         quit()

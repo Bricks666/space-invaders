@@ -19,6 +19,6 @@ class Levels(Screen):
         self.__parts__.append(List(self.__screen__))
         return super().activate(*args, **kwargs)
 
-    def inactivate(self, *args, **kwargs) -> None:
+    def deactivate(self, *args, **kwargs) -> None:
         self.__musics__.get("game_start").stop()
-        return super().inactivate(*args, **kwargs)
+        return super().deactivate(*args, **kwargs)

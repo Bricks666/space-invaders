@@ -20,8 +20,8 @@ class Navigation(ScreenPart):
         self.__create_text__()
         return super().activate(*args, **kwargs)
 
-    def inactivate(self, *args, **kwargs) -> None:
-        return super().inactivate(*args, **kwargs)
+    def deactivate(self, *args, **kwargs) -> None:
+        return super().deactivate(*args, **kwargs)
 
     def __create_text__(self) -> None:
         """

@@ -1,6 +1,6 @@
 from typing import Dict, Generic, Optional, TypeVar, Union
 from pygame import Surface
-from packages.core.activate import Activate
+from packages.core.types import LifecycleMethods
 from packages.core.screen import Screen
 from packages.core.screen_part import ScreenPart
 
@@ -10,7 +10,7 @@ MT = TypeVar("MT")
 _MachineState = Union[Screen, ScreenPart]
 
 
-class StateMachine(Activate, Generic[MT]):
+class StateMachine(LifecycleMethods, Generic[MT]):
     """
     Интерфейс для стейт-машины с некоторыми дополнениями
     """
@@ -25,7 +25,14 @@ class StateMachine(Activate, Generic[MT]):
     """
 
     def __init__(self, screen: Surface):
+        LifecycleMethods.__init__(self)
+        Generic[MT].__init__(self, None)
         self.__screen__ = screen
+
+    def init(self, *args, **kwargs):
+        for key in self.__states__:
+            self.__states__[key].init(*args, **kwargs)
+        return super().init(*args, **kwargs)
 
     def change_state(self, state_id: MT, *args) -> None:
         """
@@ -35,7 +42,7 @@ class StateMachine(Activate, Generic[MT]):
             """
             Так как в текущий момент никакая сцена может быть не выбрана
             """
-            self.__active_state__.inactivate()
+            self.__active_state__.deactivate()
 
         self.__active_state__ = self.__states__.get(state_id)
         self.__active_state__.activate(*args)
@@ -66,7 +73,7 @@ class StateMachine(Activate, Generic[MT]):
 
         return super().activate(*args, **kwargs)
 
-    def inactivate(self, *args, **kwargs) -> None:
+    def deactivate(self, *args, **kwargs) -> None:
         """
         Метод дезактивации машины
         """
@@ -74,7 +81,7 @@ class StateMachine(Activate, Generic[MT]):
             """
             Машину может не иметь никакого состояния на момент активации
             """
-            self.__active_state__.inactivate(*args, **kwargs)
+            self.__active_state__.deactivate(*args, **kwargs)
             self.__active_state__ = None
 
-        return super().inactivate(*args, **kwargs)
+        return super().deactivate(*args, **kwargs)

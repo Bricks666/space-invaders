@@ -2,6 +2,7 @@ from abc import abstractmethod
 from enum import Enum
 from typing import Final, final
 from packages.core.collidable import Collidable
+from .game_object import GameObject
 
 
 @final
@@ -12,7 +13,7 @@ class Direction(Enum):
     BOTTOM: Final[int] = 1
 
 
-class Entity(Collidable):
+class Entity(GameObject):
     """
     Интерфейс для сущности
     """
@@ -21,7 +22,6 @@ class Entity(Collidable):
     Векторная скорость перемещения сущности
     """
 
-    @abstractmethod
     def fire(self) -> None:
         """
         Метод для стрельбы
@@ -30,7 +30,6 @@ class Entity(Collidable):
         """
         pass
 
-    @abstractmethod
     def move(self) -> None:
         """
         Метод для передвижения сущности

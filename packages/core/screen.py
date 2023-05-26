@@ -1,10 +1,10 @@
 from typing import Dict, List
 from pygame import Surface, mixer
-from packages.core.activate import Activate
+from packages.core.types import LifecycleMethods
 from packages.core.screen_part import ScreenPart
 
 
-class Screen(Activate):
+class Screen(LifecycleMethods):
     """
     Абстрактный класс описывающий экран
     """
@@ -51,14 +51,14 @@ class Screen(Activate):
         for part in self.__parts__:
             part.activate(*args, **kwargs)
 
-    def inactivate(self, *args, **kwargs) -> None:
+    def deactivate(self, *args, **kwargs) -> None:
         """
         Метод дезактивации экрана
 
         Дезактивирует все свои части и очищает их список
         """
         for part in self.__parts__:
-            part.inactivate(*args, **kwargs)
+            part.deactivate(*args, **kwargs)
         self.__parts__.clear()
         """
         Очищение списка частей

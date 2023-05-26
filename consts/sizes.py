@@ -1,4 +1,4 @@
-from typing import Final, Tuple
+from typing import Final
 
 
 SPRITE_SIZE: Final[int] = 64

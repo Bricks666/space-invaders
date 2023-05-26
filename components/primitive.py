@@ -1,8 +1,8 @@
 from pygame import Color, Rect, Surface
-from packages.core import Sprite
+from packages.core.game_object import GameObject
 
 
-class Primitive(Sprite):
+class Primitive(GameObject):
     """
     Класс описывающий прямоугольный примитив
     """

@@ -1,10 +1,10 @@
 from typing import Dict, List
 from pygame import mixer, Surface, sprite, transform
 from consts import LEVEL_HEIGHT, SCREEN_MARGIN, BulletType
-from packages.core import Collidable
+from packages.core.game_object import GameObject
 
 
-class Bullet(Collidable):
+class Bullet(GameObject):
     """
     Базовый класс для пули
     """

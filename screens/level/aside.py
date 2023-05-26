@@ -56,9 +56,9 @@ class Aside(ScreenPart):
         self.__create_button__()
         return super().activate(*args, **kwargs)
 
-    def inactivate(self, *args, **kwargs) -> None:
+    def deactivate(self, *args, **kwargs) -> None:
         self.__live_sprites__.empty()
-        return super().inactivate(*args, **kwargs)
+        return super().deactivate(*args, **kwargs)
 
     def __validate_lives__(self) -> None:
         """

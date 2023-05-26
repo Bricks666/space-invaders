@@ -1,9 +1,9 @@
 from pygame import Rect, Surface, sprite
-from packages.core.activate import Activate
 from packages.core.group import Group
+from packages.core.scripts import Scriptable
 
 
-class ScreenPart(Activate):
+class ScreenPart(Scriptable):
     """
     Абстрактный класс описывающий кусок текущего экрана
     """
@@ -21,6 +21,7 @@ class ScreenPart(Activate):
     """
 
     def __init__(self, screen: Surface, rect: Rect) -> None:
+        Scriptable.__init__(self)
         self.__all_sprites__ = Group[sprite.Sprite]()
         self.__screen__ = screen
         self.rect = rect
@@ -38,11 +39,12 @@ class ScreenPart(Activate):
         self.__all_sprites__.draw(self.__screen__, *args)
 
     def activate(self, *args, **kwargs) -> None:
+        self.__all_sprites__.activate()
         return super().activate(*args, **kwargs)
 
-    def inactivate(self, *args, **kwargs) -> None:
-        self.__all_sprites__.empty()
+    def deactivate(self, *args, **kwargs) -> None:
+        self.__all_sprites__.deactivate()
         """
         Очистка сцены после ее дезактивации
         """
-        return super().inactivate(*args, **kwargs)
+        return super().deactivate(*args, **kwargs)

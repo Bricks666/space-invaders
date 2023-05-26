@@ -1,10 +1,10 @@
 from random import randint
 from time import time
-from pygame import K_LEFT, K_RIGHT, K_SPACE, K_a, K_d, Surface, display, Rect, key
+from pygame import Surface, display, Rect
 from components import Primitive
 from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, BORDER_COLOR
 from entities.hero import Hero
-from packages.core import ScreenPart, Group, Collidable, Direction
+from packages.core import ScreenPart, Group, Collidable
 from packages.events import CustomEventsTypes, custom_event,  emit_event
 from packages.inject import Injector
 from entities.enemy import Enemy
@@ -54,18 +54,6 @@ class LevelPlace(ScreenPart):
         elif self.__check_win__():
             self.__end__("You win")
             return
-
-        keys = key.get_pressed()
-        hero = self.__get_hero__()
-        if (keys[K_RIGHT] or keys[K_d]) and hero:
-            hero.move(Direction.RIGHT)
-        elif (keys[K_LEFT] or keys[K_a]) and hero:
-            hero.move(Direction.LEFT)
-        if keys[K_SPACE] and hero:
-            hero.fire()
-
-        self.__move_enemies__()
-        self.__fire_enemy__()
         super().update()
 
     def activate(self, level_id: int) -> None:
@@ -85,7 +73,7 @@ class LevelPlace(ScreenPart):
 
         return super().activate()
 
-    def inactivate(self) -> None:
+    def deactivate(self) -> None:
         self.__enemies__.empty()
         Collidable.reset_collidable()
         """
@@ -93,7 +81,7 @@ class LevelPlace(ScreenPart):
         """
         self.__scores__.save()
 
-        return super().inactivate()
+        return super().deactivate()
 
     def __fire_enemy__(self) -> None:
         current_time = time()
@@ -102,13 +90,6 @@ class LevelPlace(ScreenPart):
             shooter = randint(0, len(enemies) - 1)
             enemies[shooter].fire()
             self.__last_enemy_fire_time__ = current_time
-
-    def __move_enemies__(self) -> None:
-        for enemy in self.__enemies__:
-            enemy.move()
-
-    def __get_hero__(self) -> Hero | None:
-        return self.__heros__.sprites()[0]
 
     def __check_win__(self) -> bool:
         """

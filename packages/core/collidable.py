@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import Final, List
 from pygame import sprite
 
@@ -24,7 +24,6 @@ class Collidable(Sprite, ABC):
         collidable.add(self)
         self.__collidable__ = collidable
 
-    @abstractmethod
     def __collide__(self) -> bool:
         """
         Метод для проверки коллизии
