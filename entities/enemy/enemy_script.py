@@ -38,6 +38,7 @@ class EnemyScript(Script["Enemy"]):
     """
     Время в секундах с момента последнего движения
     """
+    __velocity__: float
 
     def activate(self, *args, **kwargs):
         total_count = self._game_object._total_number
@@ -67,7 +68,7 @@ class EnemyScript(Script["Enemy"]):
             self._game_object.rect.move_ip(0, SPRITE_SIZE / 2)
             return
 
-        self._game_object.rect.move_ip(self._game_object.__velocity__, 0)
+        self._game_object.rect.move_ip(self.__velocity__, 0)
         self.__end__ = self.__check_end__()
 
     def kill(self) -> None:
@@ -86,8 +87,8 @@ class EnemyScript(Script["Enemy"]):
         """
         Изменяет направление движения
         """
-        self._game_object.__velocity__ *= -1
+        self.__velocity__ *= -1
 
     def __can_move__(self, current_time: float) -> bool:
-        print(self.__last_move__ + self.__move_timeout__, current_time, sep='==')
+        print(self.__last_move__ + self.__move_timeout__ <= current_time)
         return self.__last_move__ + self.__move_timeout__ <= current_time

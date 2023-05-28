@@ -1,9 +1,9 @@
 from pygame import transform
 from consts import SPRITE_SIZE
-from packages.core.sprite import Sprite
+from packages.core.game_object import GameObject
 
 
-class Live(Sprite):
+class Live(GameObject):
     """
     Изображение жизни на сайдбаре
     """

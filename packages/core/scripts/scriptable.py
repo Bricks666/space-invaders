@@ -1,9 +1,9 @@
 from typing import Set
 from .script import *
-from ..types import LifecycleMethods
+from ..types import BaseLifecycleMethods
 
 
-class Scriptable(LifecycleMethods):
+class Scriptable(BaseLifecycleMethods):
     _scripts: Set["Script"]
 
     def __init__(self, *args, **kwargs) -> None:

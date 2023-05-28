@@ -33,7 +33,7 @@ class Bullet(GameObject):
         self.rect.y = y
 
     def update(self) -> None:
-        if self.__collide__():
+        if self.__collide__() and self.alive():
             """
             Если произошло столкновение, то нужно уничтожить пулю
             """

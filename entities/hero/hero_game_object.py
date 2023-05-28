@@ -6,10 +6,15 @@ from packages.core import Entity, Direction
 from stores.lives import LivesStore
 from packages.inject import Injector
 from packages.core.scripts import attach_scripts
+from packages.core.views import attach_views
 from .hero_script import HeroScript
+from .hero_sprite import HeroSprite
 
 
 @attach_scripts(HeroScript)
+@attach_views({
+    "sprite_class": HeroSprite
+})
 class Hero(Entity):
     """
     Класс игрока

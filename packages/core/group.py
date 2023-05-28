@@ -1,13 +1,13 @@
 from typing import Generic, Iterable, Iterator, List, TypeVar, Union
 from pygame import sprite
-from .types import LifecycleMethods
+from .types import DrawableLifecycleMethods
 from .game_object import *
 
 
 TGT = TypeVar("TGT", bound='GameObject')
 
 
-class Group(Generic[TGT], sprite.Group, LifecycleMethods):
+class Group(Generic[TGT], sprite.Group, DrawableLifecycleMethods):
     """
     Надстройка над группой из библиотеки
 
@@ -15,9 +15,9 @@ class Group(Generic[TGT], sprite.Group, LifecycleMethods):
     """
 
     def __init__(self, *sprites: TGT) -> None:
-        sprite.Group.__init__(self, *sprites)
         Generic[TGT].__init__(self, (None, None))
-        LifecycleMethods.__init__(self)
+        DrawableLifecycleMethods.__init__(self)
+        sprite.Group.__init__(self, *sprites)
 
     def init(self, *args, **kwargs):
         for sprite in self.sprites():
@@ -51,7 +51,7 @@ class Group(Generic[TGT], sprite.Group, LifecycleMethods):
     def kill(self, *args, **kwargs):
         for sprite in self.sprites():
             sprite.kill(*args, **kwargs)
-        return LifecycleMethods.kill(self, *args, **kwargs)
+        return DrawableLifecycleMethods.kill(self, *args, **kwargs)
 
     def __iter__(self) -> Iterator[TGT]:
         return super().__iter__()

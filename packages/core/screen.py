@@ -1,10 +1,10 @@
 from typing import Dict, List
 from pygame import Surface, mixer
-from packages.core.types import LifecycleMethods
+from packages.core.types import BaseLifecycleMethods
 from packages.core.screen_part import ScreenPart
 
 
-class Screen(LifecycleMethods):
+class Screen(BaseLifecycleMethods):
     """
     Абстрактный класс описывающий экран
     """
