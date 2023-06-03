@@ -1,4 +1,4 @@
-from packages.core.views import Sprite
+from packages.core.view import Sprite
 from pygame import image
 
 

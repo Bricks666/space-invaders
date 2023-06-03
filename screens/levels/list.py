@@ -4,7 +4,8 @@ from models import LevelModel
 from packages.events import CustomEventsTypes, custom_event, emit_event
 from packages.inject import Injector
 from stores.level import LevelStore
-from packages.core import ScreenPart, Group
+from packages.core import ScreenPart
+from packages.core.game_object import Group
 from components import Button
 
 

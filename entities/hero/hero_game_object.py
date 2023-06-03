@@ -1,12 +1,8 @@
-from time import time
-from typing import List, Tuple
+from typing import List
 from pygame import sprite
-from consts import FIRE_COOLDOWN
-from packages.core import Entity, Direction
-from stores.lives import LivesStore
-from packages.inject import Injector
-from packages.core.scripts import attach_scripts
-from packages.core.views import attach_views
+from packages.core.game_object import GameObject
+from packages.core.script import attach_scripts
+from packages.core.view import attach_views
 from .hero_script import HeroScript
 from .hero_sprite import HeroSprite
 
@@ -15,7 +11,7 @@ from .hero_sprite import HeroSprite
 @attach_views({
     "sprite_class": HeroSprite
 })
-class Hero(Entity):
+class Hero(GameObject):
     """
     Класс игрока
     """

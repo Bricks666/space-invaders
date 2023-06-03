@@ -6,13 +6,14 @@ from ..types import BaseLifecycleMethods
 GO = TypeVar('GO', bound="Scriptable")
 
 
-class Script(Generic[GO], BaseLifecycleMethods):
+class Script(Generic[GO], BaseLifecycleMethods, ABC):
     _game_object: "GO"
     __killed: bool
 
     def __init__(self, game_object: "GO") -> None:
         Generic[GO].__init__(self, None)
         BaseLifecycleMethods.__init__(self)
+        ABC.__init__(self)
         self._game_object = game_object
         self.__killed = False
 

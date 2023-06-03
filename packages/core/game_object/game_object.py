@@ -1,16 +1,17 @@
-from .scripts import Scriptable
 from typing import Set
-from .views import Viewable
+from ..math import AABB, Vector
+from ..script import Scriptable
+from ..view import Viewable
 from .group import *
 
 
-class GameObject(Scriptable, Viewable):
+class GameObject(AABB, Scriptable, Viewable):
+    name: str
     __killed: bool
-
     _groups: Set['Group']
 
-    def __init__(self, *args, **kwargs) -> None:
-        print(self.__class__.__name__)
+    def __init__(self, start: Vector, end: Vector, *args, **kwargs) -> None:
+        AABB.__init__(self, start, end)
         Scriptable.__init__(self, *args, **kwargs)
         Viewable.__init__(self, *args, **kwargs)
         self.__killed = False

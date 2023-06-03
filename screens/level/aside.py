@@ -1,7 +1,8 @@
 from pygame import Surface, Rect
 from consts import ASIDE_BAR_WIDTH, BORDER_WIDTH, HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, SPRITE_SIZE
 from components import Text, Button
-from packages.core import ScreenPart, Group
+from packages.core import ScreenPart
+from packages.core.game_object import Group
 from packages.events import CustomEventsTypes, custom_event, emit_event
 from .live import Live
 from stores.lives import LivesStore

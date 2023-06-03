@@ -1,8 +1,11 @@
+from typing import Tuple
+from time import time
 from pygame import key, K_SPACE, K_LEFT, K_RIGHT, K_d, K_a
-from packages.core.scripts import Script
+from packages.core.script import Script
+from packages.core.entity import Direction
 from packages.inject import Injector
 from stores.lives import LivesStore
-from consts import SCREEN_MARGIN, LEVEL_WIDTH, SPRITE_SIZE, STEP
+from consts import SCREEN_MARGIN, LEVEL_WIDTH, SPRITE_SIZE, STEP, FIRE_COOLDOWN
 from .hero_bullet_game_object import HeroBullet
 from .hero_game_object import *
 

@@ -1,6 +1,5 @@
 from pygame import sprite, Surface
-from typing import List
-from ..types import DrawableLifecycleMethods
+from ..base.lifecycle import DrawableLifecycleMethods
 
 
 class Viewable(DrawableLifecycleMethods):

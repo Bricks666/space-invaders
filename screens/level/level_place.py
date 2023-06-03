@@ -4,7 +4,8 @@ from pygame import Surface, display, Rect
 from components import Primitive
 from consts import BORDER_WIDTH, FIRE_COOLDOWN, GAME_NAME, LEVEL_HEIGHT, LEVEL_WIDTH, SCREEN_MARGIN, BORDER_COLOR
 from entities.hero import Hero
-from packages.core import ScreenPart, Group, Collidable
+from packages.core import ScreenPart, Collidable
+from packages.core.game_object import Group
 from packages.events import CustomEventsTypes, custom_event,  emit_event
 from packages.inject import Injector
 from entities.enemy import Enemy

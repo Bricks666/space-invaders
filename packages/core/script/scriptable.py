@@ -1,6 +1,6 @@
 from typing import Set
+from ..base.lifecycle import BaseLifecycleMethods
 from .script import *
-from ..types import BaseLifecycleMethods
 
 
 class Scriptable(BaseLifecycleMethods):

@@ -2,8 +2,8 @@ from typing import List, Dict
 from pygame import Surface,  transform, sprite, mixer
 from consts.main import STEP
 from entities.bullet import Bullet
-from packages.core.scripts import attach_scripts
-from packages.core.views import attach_views
+from packages.core.script import attach_scripts
+from packages.core.view import attach_views
 from packages.core.game_object import GameObject
 from consts import SPRITE_SIZE, BulletType
 from .enemy_script import EnemyScript

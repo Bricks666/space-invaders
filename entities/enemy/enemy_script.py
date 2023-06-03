@@ -1,9 +1,9 @@
 from time import time
 from .enemy_game_object import *
-from packages.core.scripts import Script
+from packages.core.script import Script
 from packages.inject import Injector
 from stores.scores import ScoresStore
-from packages.core.entity import Direction
+from packages.core import Direction
 from consts import SCREEN_MARGIN, LEVEL_WIDTH
 
 

@@ -1,7 +1,7 @@
 from pygame import Rect, Surface, sprite
-from packages.core.group import Group
+from packages.core.game_object import Group
 from packages.core.types import DrawableLifecycleMethods
-from packages.core.scripts import Scriptable
+from packages.core.script import Scriptable
 
 
 class ScreenPart(Scriptable, DrawableLifecycleMethods):

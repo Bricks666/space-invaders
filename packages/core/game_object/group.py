@@ -1,5 +1,5 @@
 from typing import Generic, Iterable, Iterator, List, TypeVar, Union, Set, Self
-from .types import DrawableLifecycleMethods
+from ..types import DrawableLifecycleMethods
 from .game_object import GameObject
 
 
