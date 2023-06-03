@@ -6,8 +6,8 @@ from ..types import DrawableLifecycleMethods
 class Viewable(DrawableLifecycleMethods):
     _sprites: sprite.Group
 
-    def __init__(self, sprites: None | List[sprite.Sprite] = [], *args, **kwargs) -> None:
-        self._sprites = sprite.Group(*sprites)
+    def __init__(self, *args, **kwargs) -> None:
+        self._sprites = sprite.Group()
         DrawableLifecycleMethods.__init__(self, *args, **kwargs)
 
     def draw(self, screen: Surface, *args, **kwargs):

@@ -22,9 +22,9 @@ class Hero(Entity):
 
     def __init__(self, x: float, y: float, groups: List[sprite.Group]) -> None:
         super().__init__(*groups)
-        self.image = self.__images__.get("hero")
-        self.__musics__.get("explosion").set_volume(0.2)
+        # self.image = self.__images__.get("hero")
+        # self.__musics__.get("explosion").set_volume(0.2)
 
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        # self.rect = self.image.get_rect()
+        # self.rect.x = x
+        # self.rect.y = y

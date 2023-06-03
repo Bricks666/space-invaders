@@ -86,7 +86,7 @@ class LevelPlace(ScreenPart):
     def __fire_enemy__(self) -> None:
         current_time = time()
         if self.__last_enemy_fire_time__ + FIRE_COOLDOWN <= current_time:
-            enemies = self.__enemies__.sprites()
+            enemies = self.__enemies__.objects()
             shooter = randint(0, len(enemies) - 1)
             enemies[shooter].fire()
             self.__last_enemy_fire_time__ = current_time

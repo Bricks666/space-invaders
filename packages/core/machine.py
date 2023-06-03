@@ -1,6 +1,6 @@
 from typing import Dict, Generic, Optional, TypeVar, Union
 from pygame import Surface
-from packages.core.types import BaseLifecycleMethods
+from packages.core.types import DrawableLifecycleMethods
 from packages.core.screen import Screen
 from packages.core.screen_part import ScreenPart
 
@@ -10,7 +10,7 @@ MT = TypeVar("MT")
 _MachineState = Union[Screen, ScreenPart]
 
 
-class StateMachine(BaseLifecycleMethods, Generic[MT]):
+class StateMachine(DrawableLifecycleMethods, Generic[MT]):
     """
     Интерфейс для стейт-машины с некоторыми дополнениями
     """
@@ -25,7 +25,7 @@ class StateMachine(BaseLifecycleMethods, Generic[MT]):
     """
 
     def __init__(self, screen: Surface):
-        BaseLifecycleMethods.__init__(self)
+        DrawableLifecycleMethods.__init__(self)
         Generic[MT].__init__(self, None)
         self.__screen__ = screen
 

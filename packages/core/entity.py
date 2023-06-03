@@ -17,10 +17,6 @@ class Entity(GameObject):
     """
     Интерфейс для сущности
     """
-    __velocity__: float = 0
-    """
-    Векторная скорость перемещения сущности
-    """
 
     def fire(self) -> None:
         """

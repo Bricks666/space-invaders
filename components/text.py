@@ -1,5 +1,6 @@
 from typing import Dict, Literal,  Union
 import pygame
+from pygame import Surface
 from consts import TEXT_COLOR
 from packages.core.game_object import GameObject
 
@@ -91,6 +92,10 @@ class Text(GameObject):
             Выравнивание текста, если было изменено сообщение
             """
             self.rect = rect
+
+    def draw(self, screen: Surface, *args, **kwargs):
+        screen.blit(self.image, self.rect)
+        return super().draw(screen, *args, **kwargs)
 
     def change_size(self, size: _FontSizes) -> None:
         """

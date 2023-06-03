@@ -1,9 +1,10 @@
 from pygame import Rect, Surface, sprite
 from packages.core.group import Group
+from packages.core.types import DrawableLifecycleMethods
 from packages.core.scripts import Scriptable
 
 
-class ScreenPart(Scriptable):
+class ScreenPart(Scriptable, DrawableLifecycleMethods):
     """
     Абстрактный класс описывающий кусок текущего экрана
     """
@@ -22,6 +23,7 @@ class ScreenPart(Scriptable):
 
     def __init__(self, screen: Surface, rect: Rect) -> None:
         Scriptable.__init__(self)
+        DrawableLifecycleMethods.__init__(self)
         self.__all_sprites__ = Group[sprite.Sprite]()
         self.__screen__ = screen
         self.rect = rect
