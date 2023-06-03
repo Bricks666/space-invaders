@@ -58,6 +58,7 @@ class Group(Generic[TGT], DrawableLifecycleMethods):
         for object in objects:
             if isinstance(object, GameObject) and not self.has(object):
                 self._add(object)
+                object.add_group(self)
                 continue
             self.add(*object)
         return self
@@ -66,6 +67,7 @@ class Group(Generic[TGT], DrawableLifecycleMethods):
         for object in objects:
             if isinstance(object, GameObject) and self.has(object):
                 self._remove(object)
+                object.remove_group(self)
                 continue
             self.remove(*object)
         return self
@@ -80,6 +82,9 @@ class Group(Generic[TGT], DrawableLifecycleMethods):
 
         return True
 
+    def empty(self) -> Self:
+        self.remove(self._objects)
+
     def _add(self, object: TGT) -> Self:
         self._objects.add(object)
         return self
@@ -87,6 +92,9 @@ class Group(Generic[TGT], DrawableLifecycleMethods):
     def _remove(self, object: TGT) -> Self:
         self._objects.remove(object)
         return self
+
+    def __len__(self) -> int:
+        return len(self._objects)
 
     def __contains__(self, object: TGT) -> None:
         return self.has(object)

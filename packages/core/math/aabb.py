@@ -1,11 +1,22 @@
 from abc import ABC
-from typing import overload, Self, Union
-from .vector import Vector, ZERO_VECTOR, Coordinates
+from typing import overload, Self, Union, NamedTuple
+from enum import Enum
+from .vector import Vector, ZERO_VECTOR, VectorLike
+from ..base.event_emitter import EventEmitter
 
 
-class AABB(ABC):
-    __start: Vector
-    __end: Vector
+class Sizes(NamedTuple):
+    width: float = 0
+    height: float = 0
+
+
+class AABBEvents(Enum):
+    resize = 'resize'
+
+
+class AABB(ABC, EventEmitter):
+    _start: Vector
+    _end: Vector
 
     @overload
     def __init__(self) -> None:
@@ -20,107 +31,112 @@ class AABB(ABC):
         ...
 
     def __init__(self, *args) -> None:
-        super().__init__()
+        super(ABC, self).__init__()
+        super(EventEmitter, self).__init__()
 
         if len(args) == 0:
-            self.__start = Vector.copy(ZERO_VECTOR)
-            self.__end = Vector.copy(ZERO_VECTOR)
+            self._start = Vector.copy(ZERO_VECTOR)
+            self._end = Vector.copy(ZERO_VECTOR)
         elif len(args) == 1:
-            self.__start = Vector.copy(ZERO_VECTOR)
-            self.__end = args[0]
+            self._start = Vector.copy(ZERO_VECTOR)
+            self._end = args[0]
         else:
-            self.__start = args[0]
-            self.__end = args[1]
+            self._start = args[0]
+            self._end = args[1]
+
+    @property
+    def sizes(self) -> Sizes:
+        return Sizes(self.width, self.height)
 
     @property
     def width(self) -> float:
-        return abs(self.__end.x - self.__start.x)
+        return abs(self._end.x - self._start.x)
 
     @width.setter
-    def width(self, width: float) -> float:
-        self.__end.x = self.__start.x + width
-        return width
+    def width(self, __value: float) -> float:
+        self._end.x = self._start.x + __value
+        return __value
 
     @property
     def height(self) -> float:
-        return abs(self.__end.y - self.__start.y)
+        return abs(self._end.y - self._start.y)
 
     @height.setter
-    def height(self, height: float) -> float:
-        self.__end.y = self.__start.y + height
-        return height
+    def height(self, __value: float) -> float:
+        self._end.y = self._start.y + __value
+        return __value
 
     @property
     def start_x(self) -> float:
-        return self.__start.x
+        return self._start.x
 
     @start_x.setter
-    def start_x(self, x: float) -> float:
-        self.__start.x = x
-        return x
+    def start_x(self, __value: float) -> float:
+        self._start.x = __value
+        return __value
 
     @property
     def center_x(self) -> float:
         return (self.start_x + self.end_x) / 2
 
     @center_x.setter
-    def center_x(self, x: float) -> float:
+    def center_x(self, __value: float) -> float:
         width = self.width
         half_width = width / 2
-        self.__start.x = x - half_width
-        self.__end.x = x + half_width
-        return x
+        self._start.x = __value - half_width
+        self._end.x = __value + half_width
+        return __value
 
     @property
     def end_x(self) -> float:
-        return self.__end.x
+        return self._end.x
 
     @end_x.setter
-    def end_x(self, x: float) -> float:
-        self.__end.x = x
-        return x
+    def end_x(self, __value: float) -> float:
+        self._end.x = __value
+        return __value
 
     @property
     def start_y(self) -> float:
-        return self.__start.y
+        return self._start.y
 
     @start_y.setter
-    def start_y(self, y: float) -> float:
-        self.__start.y = y
-        return y
+    def start_y(self, __value: float) -> float:
+        self._start.y = __value
+        return __value
 
     @property
     def center_y(self) -> float:
         return (self.start_y + self.end_y) / 2
 
     @center_y.setter
-    def center_y(self, y: float) -> float:
+    def center_y(self, __value: float) -> float:
         height = self.height
         half_height = height / 2
-        self.__start.y = y - half_height
-        self.__end.y = y + half_height
-        return y
+        self._start.y = __value - half_height
+        self._end.y = __value + half_height
+        return __value
 
     @property
     def end_y(self) -> float:
-        return self.__end.y
+        return self._end.y
 
     @end_y.setter
-    def end_y(self, y: float) -> float:
-        self.__end.y = y
-        return y
+    def end_y(self, __value: float) -> float:
+        self._end.y = __value
+        return __value
 
-    def move_on(self, coords: Union[Coordinates, Vector]) -> Self:
-        self.__start.add(coords)
-        self.__end.add(coords)
+    def move_on(self, coords: Union[VectorLike, Vector]) -> Self:
+        self._start.add(coords)
+        self._end.add(coords)
 
         return self
 
-    def move_to(self, coords: Union[Coordinates, Vector]) -> Self:
+    def move_to(self, coords: Union[VectorLike, Vector]) -> Self:
         width = self.width
         height = self.height
 
-        self.__start.set(coords)
-        self.__end.set(Coordinates(coords.x + width, coords.y + height))
+        self._start.set(coords)
+        self._end.set(VectorLike(coords.x + width, coords.y + height))
 
         return self

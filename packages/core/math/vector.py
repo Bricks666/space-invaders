@@ -2,9 +2,9 @@ import math as m
 from typing import Any, Union, NamedTuple
 
 
-class Coordinates(NamedTuple):
+class VectorLike(NamedTuple):
     x: float = 0
-    y: float = 0
+    y: float = x
 
 
 class Vector:
@@ -18,13 +18,13 @@ class Vector:
         self.x = x
         self.y = y
 
-    def add(self, vector: Union['Vector', Coordinates]) -> 'Vector':
+    def add(self, vector: Union['Vector', VectorLike]) -> 'Vector':
         return Vector(self.x + vector.x, self.y + vector.y)
 
-    def subtract(self, vector: Union['Vector', Coordinates]) -> 'Vector':
+    def subtract(self, vector: Union['Vector', VectorLike]) -> 'Vector':
         return Vector(self.x - vector.x, self.y - vector.y)
 
-    def set(self, vector: Union['Vector', Coordinates]):
+    def set(self, vector: Union['Vector', VectorLike]):
         self.x = vector.x
         self.y = vector.y
 
@@ -50,5 +50,3 @@ class Vector:
 
 ZERO_VECTOR = Vector()
 ONE_VECTOR = Vector(1, 1)
-
-print(ONE_VECTOR)

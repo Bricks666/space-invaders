@@ -2,8 +2,9 @@ from typing import List, Dict
 from pygame import Surface,  transform, sprite, mixer
 from consts.main import STEP
 from entities.bullet import Bullet
+from packages.core.math import VectorLike
 from packages.core.script import attach_scripts
-from packages.core.view import attach_views
+from packages.core.view import attach_views, AttachSpriteOptions, SpritePositionOptions
 from packages.core.game_object import GameObject
 from consts import SPRITE_SIZE, BulletType
 from .enemy_script import EnemyScript
@@ -11,9 +12,12 @@ from .enemy_view import EnemyView
 
 
 @attach_scripts(EnemyScript)
-@attach_views({
-  "sprite_class": EnemyView
-})
+@attach_views(AttachSpriteOptions(
+    sprite_class=EnemyView,
+    position_options=SpritePositionOptions(
+        scale=VectorLike(0.3, 0.3)
+    )
+))
 class Enemy(GameObject):
     """
     Враг
@@ -26,7 +30,6 @@ class Enemy(GameObject):
 
     def __init__(self, x: float, y: float, number: int, total_count: int, groups: List[sprite.Group], score: int = 50) -> None:
         super().__init__()
-        print(groups)
         # self._sprites.add(groups)
         # self.image = transform.scale(
         #     Enemy.__images__.get("enemy"), (SPRITE_SIZE * 0.7, SPRITE_SIZE * 0.7))

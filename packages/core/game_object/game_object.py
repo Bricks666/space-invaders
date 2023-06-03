@@ -1,17 +1,15 @@
 from typing import Set
-from ..math import AABB, Vector
 from ..script import Scriptable
 from ..view import Viewable
 from .group import *
 
 
-class GameObject(AABB, Scriptable, Viewable):
+class GameObject(Scriptable, Viewable):
     name: str
     __killed: bool
     _groups: Set['Group']
 
-    def __init__(self, start: Vector, end: Vector, *args, **kwargs) -> None:
-        AABB.__init__(self, start, end)
+    def __init__(self, *args, **kwargs) -> None:
         Scriptable.__init__(self, *args, **kwargs)
         Viewable.__init__(self, *args, **kwargs)
         self.__killed = False
@@ -39,5 +37,8 @@ class GameObject(AABB, Scriptable, Viewable):
     def add_group(self, group: 'Group') -> None:
         self._groups.add(group)
 
-    def has_group(self, group: 'Group') -> None:
-        self._groups.add(group)
+    def has_group(self, group: 'Group') -> bool:
+        return group in self._groups
+
+    def remove_group(self, group: 'Group') -> None:
+        self._groups.remove(group)

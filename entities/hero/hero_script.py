@@ -31,7 +31,7 @@ class HeroScript(Script["Hero"]):
 
     def activate(self, *args, **kwargs):
         self.__start_position__ = (
-            self._game_object.rect.x, self._game_object.rect.y)
+            self._game_object.start_x, self._game_object.start_y)
         self.__velocity__ = STEP
 
         self.__last_fire__ = time()

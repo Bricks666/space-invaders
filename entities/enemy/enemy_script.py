@@ -1,10 +1,11 @@
 from time import time
-from .enemy_game_object import *
+from packages.core.math import VectorLike
 from packages.core.script import Script
 from packages.inject import Injector
 from stores.scores import ScoresStore
 from packages.core import Direction
 from consts import SCREEN_MARGIN, LEVEL_WIDTH
+from .enemy_game_object import *
 
 
 @Injector.inject(ScoresStore, "__scores__")
@@ -61,18 +62,18 @@ class EnemyScript(Script["Enemy"]):
             return
 
         self.__last_move__ = current_time
-        self._game_object.__musics__.get("step").play()
+        # self._game_object.__musics__.get("step").play()
         if self.__end__:
             self.__change_direction__()
             self.__end__ = False
-            self._game_object.rect.move_ip(0, SPRITE_SIZE / 2)
+            self._game_object.move_on(VectorLike(0, SPRITE_SIZE / 2))
             return
 
-        self._game_object.rect.move_ip(self.__velocity__, 0)
+        self._game_object.move_on(VectorLike(self.__velocity__, 0))
         self.__end__ = self.__check_end__()
 
     def kill(self) -> None:
-        self._game_object.__musics__.get("destroy").play()
+        # self._game_object.__musics__.get("destroy").play()
         self.__scores__.add(self.__score__)
         return super().kill()
 
@@ -80,8 +81,8 @@ class EnemyScript(Script["Enemy"]):
         """
         Метод проверяет, дошел ли враг до конца
         """
-        return self._game_object.rect.x <= SCREEN_MARGIN + self.__offset_left__ or \
-            self._game_object.rect.x >= LEVEL_WIDTH + SCREEN_MARGIN - self.__offset_right__
+        return self._game_object.start_x <= SCREEN_MARGIN + self.__offset_left__ or \
+            self._game_object.start_x >= LEVEL_WIDTH + SCREEN_MARGIN - self.__offset_right__
 
     def __change_direction__(self) -> None:
         """
@@ -90,5 +91,4 @@ class EnemyScript(Script["Enemy"]):
         self.__velocity__ *= -1
 
     def __can_move__(self, current_time: float) -> bool:
-        print(self.__last_move__ + self.__move_timeout__ <= current_time)
         return self.__last_move__ + self.__move_timeout__ <= current_time
