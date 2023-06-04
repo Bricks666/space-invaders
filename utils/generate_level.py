@@ -23,13 +23,13 @@ def generate_level(level_path: str) -> Tuple[Group[sprite.Sprite], Group[Enemy],
                         y * SPRITE_SIZE + SCREEN_MARGIN)
             match sprite_codes[y][x]:
                 case EntityCodes.ENEMY.value:
-                    enemy = Enemy(*position, enemies_count,
-                                  total_enemies_count, [all_sprites])
+                    enemy = Enemy(enemies_count,
+                                  total_enemies_count, *position, SPRITE_SIZE, SPRITE_SIZE)
                     all_sprites.add(enemy)
                     enemies.add(enemy)
                     enemies_count += 1
                 case EntityCodes.HERO.value:
-                    hero = Hero(*position, [all_sprites])
+                    hero = Hero(*position, SPRITE_SIZE, SPRITE_SIZE)
                     all_sprites.add(hero)
                     heros.add(hero)
 

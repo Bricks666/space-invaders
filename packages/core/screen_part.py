@@ -21,18 +21,18 @@ class ScreenPart(Scriptable, DrawableLifecycleMethods):
     Область, занимаемая частью
     """
 
-    def __init__(self, screen: Surface, rect: Rect) -> None:
-        Scriptable.__init__(self)
-        DrawableLifecycleMethods.__init__(self)
+    def __init__(self, screen: Surface, rect: Rect, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
         self.__objects__ = Group[sprite.Sprite]()
         self.__screen__ = screen
         self.rect = rect
 
-    def update(self, *args) -> None:
+    def update(self, *args, **kwargs) -> None:
         """
         Метод для обновления спрайтов текущей части
         """
-        self.__objects__.update(*args)
+        Scriptable.update(self, *args, **kwargs)
+        self.__objects__.update(*args, **kwargs)
 
     def draw(self, *args) -> None:
         """

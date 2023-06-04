@@ -18,21 +18,22 @@ class Screen(DrawableLifecycleMethods):
     Части экрана
     """
 
-    def __init__(self, screen: Surface) -> None:
-        super().__init__()
+    def __init__(self, screen: Surface, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
         self.__screen__ = screen
         self.__parts__ = []
 
-    def draw(self, *args) -> None:
+    def draw(self, *args, **kwargs) -> None:
         """
         Метод отрисовки экрана
 
         Отрисовывает все части экрана
         """
         for part in self.__parts__:
-            part.draw(*args)
+            part.draw(*args, **kwargs)
+        return super().draw(*args, **kwargs)
 
-    def update(self) -> None:
+    def update(self, *args, **kwargs) -> None:
         """
         Метод обновления экрана
 
@@ -40,7 +41,9 @@ class Screen(DrawableLifecycleMethods):
         """
         self.__control_events__()
         for part in self.__parts__:
-            part.update()
+            part.update(*args, **kwargs)
+
+        return super().update(*args, **kwargs)
 
     def activate(self, *args, **kwargs) -> None:
         """
@@ -50,6 +53,8 @@ class Screen(DrawableLifecycleMethods):
         """
         for part in self.__parts__:
             part.activate(*args, **kwargs)
+
+        return super().activate(*args, **kwargs)
 
     def deactivate(self, *args, **kwargs) -> None:
         """
@@ -64,6 +69,7 @@ class Screen(DrawableLifecycleMethods):
         Очищение списка частей
         Так как он формируется на каждую активацию
         """
+        return super().deactivate(*args, **kwargs)
 
     def __control_events__(self) -> None:
         """

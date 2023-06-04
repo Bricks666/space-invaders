@@ -1,22 +1,26 @@
-from typing import List, Dict
-from pygame import Surface,  transform, sprite, mixer
+from typing import List, Dict, ParamSpec
+from pygame import Surface,   sprite, mixer, image
 from consts.main import STEP
 from entities.bullet import Bullet
 from packages.core.math import VectorLike
 from packages.core.script import attach_scripts
-from packages.core.view import attach_views, AttachSpriteOptions, SpritePositionOptions
+from packages.core.view import attach_views, AttachSpriteOptions, SpritePositionOptions, Sprite
 from packages.core.game_object import GameObject
-from consts import SPRITE_SIZE, BulletType
+from consts import BulletType
 from .enemy_script import EnemyScript
-from .enemy_view import EnemyView
+
+_P = ParamSpec('_P')
 
 
 @attach_scripts(EnemyScript)
 @attach_views(AttachSpriteOptions(
-    sprite_class=EnemyView,
+    sprite_class=Sprite,
     position_options=SpritePositionOptions(
         scale=VectorLike(0.8, 0.8)
-    )
+    ),
+    kwargs={
+        'image': image.load('./assets/sprites/enemy.png')
+    }
 ))
 class Enemy(GameObject):
     """
@@ -28,19 +32,8 @@ class Enemy(GameObject):
     _total_number: int
     _number: int
 
-    def __init__(self, x: float, y: float, number: int, total_count: int, groups: List[sprite.Group], score: int = 50) -> None:
-        super().__init__()
-        # self._sprites.add(groups)
-        # self.image = transform.scale(
-        #     Enemy.__images__.get("enemy"), (SPRITE_SIZE * 0.7, SPRITE_SIZE * 0.7))
-        # """
-        # Масштабирование нужно, чтобы хитбокс не занимал все пространство спрайта
-        # и было место между врагами
-        # """
-        # self.rect = self.image.get_rect()
-        # self.rect.x = x
-        # self.rect.y = y
-
+    def __init__(self, number: int, total_count: int, *args: _P.args, **kwargs: _P.kwargs) -> None:
+        super().__init__(*args, **kwargs)
         # self.__musics__.get('step').set_volume(0.5)
         # self.__musics__.get("destroy").set_volume(0.5)
 

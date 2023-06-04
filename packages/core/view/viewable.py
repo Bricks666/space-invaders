@@ -1,4 +1,5 @@
-from pygame import sprite, Surface
+from typing import Dict
+from pygame import sprite, Surface, transform
 from ..base.lifecycle import DrawableLifecycleMethods
 from ..math import AABB
 from .sprite import *
@@ -10,8 +11,7 @@ class Viewable(AABB, DrawableLifecycleMethods):
     _position_options_dict: Dict['Sprite', SpritePositionOptions]
 
     def __init__(self, *args, **kwargs) -> None:
-        AABB.__init__(self, *args, **kwargs)
-        DrawableLifecycleMethods.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self._sprites = sprite.Group()
         self._position_options_dict = {}
@@ -42,4 +42,5 @@ class Viewable(AABB, DrawableLifecycleMethods):
 
             sprite.rect.center = center
             sprite.rect.size = sizes
+            sprite.image = transform.scale(sprite.image, sizes)
         self._mutated = False

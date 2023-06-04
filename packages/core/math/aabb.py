@@ -8,13 +8,13 @@ class Sizes(NamedTuple):
     height: float = 0
 
 
-P = ParamSpec('P')
-R = TypeVar('R')
+_P = ParamSpec('_P')
+_R = TypeVar('_R')
 
 
 def _observe_mutation():
-    def decorator(func: Callable[P, R]) -> Callable[P, R]:
-        def wrapper(self: 'AABB', *args: P.args, **kwargs: P.kwargs) -> R:
+    def decorator(func: Callable[_P, _R]) -> Callable[_P, _R]:
+        def wrapper(self: 'AABB', *args: _P.args, **kwargs: _P.kwargs) -> _R:
             start = Vector.copy(self._start)
             end = Vector.copy(self._end)
 
@@ -48,7 +48,7 @@ class AABB(ABC):
         ...
 
     def __init__(self, *args, **kwargs) -> None:
-        ABC.__init__(self)
+        super().__init__()
 
         if len(args) == 0:
             self._start = Vector.copy(ZERO_VECTOR)
@@ -56,11 +56,11 @@ class AABB(ABC):
         elif len(args) == 2:
             width, height = args
             self._start = Vector.copy(ZERO_VECTOR)
-            self._end = self._start.add(VectorLike(width, height))
+            self._end = self._start.sum(VectorLike(width, height))
         else:
             x, y, width, height = args
             self._start = Vector(x, y)
-            self._end = self._start.add(VectorLike(width, height))
+            self._end = self._start.sum(VectorLike(width, height))
 
     @property
     def sizes(self) -> Sizes:

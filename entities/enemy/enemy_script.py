@@ -4,7 +4,7 @@ from packages.core.script import Script
 from packages.inject import Injector
 from stores.scores import ScoresStore
 from packages.core import Direction
-from consts import SCREEN_MARGIN, LEVEL_WIDTH
+from consts import SCREEN_MARGIN, LEVEL_WIDTH, SPRITE_SIZE
 from .enemy_game_object import *
 
 
@@ -62,7 +62,6 @@ class EnemyScript(Script["Enemy"]):
             return
 
         self.__last_move__ = current_time
-        # self._game_object.__musics__.get("step").play()
         if self.__end__:
             self.__change_direction__()
             self.__end__ = False
@@ -73,7 +72,6 @@ class EnemyScript(Script["Enemy"]):
         self.__end__ = self.__check_end__()
 
     def kill(self) -> None:
-        # self._game_object.__musics__.get("destroy").play()
         self.__scores__.add(self.__score__)
         return super().kill()
 

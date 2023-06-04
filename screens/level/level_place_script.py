@@ -88,7 +88,7 @@ class LevelPlaceScript(Script['LevelPlace']):
         """
         Если игрок умер, то он проиграл
         """
-        return not len(self.__heros)
+        return not len(self._heros)
 
     def __end(self, phrase: str) -> None:
         evt = custom_event(CustomEventsTypes.CHANGE_SCREEN,

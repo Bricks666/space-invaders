@@ -10,8 +10,7 @@ class GameObject(Scriptable, Viewable):
     _groups: Set['Group']
 
     def __init__(self, *args, **kwargs) -> None:
-        Scriptable.__init__(self, *args, **kwargs)
-        Viewable.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__killed = False
         self._groups = set()
 
@@ -31,6 +30,7 @@ class GameObject(Scriptable, Viewable):
         if self.__killed:
             return
         self.__killed = True
+
         Scriptable.kill(self, *args, **kwargs)
         Viewable.kill(self, *args, **kwargs)
 
