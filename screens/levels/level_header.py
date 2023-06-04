@@ -17,7 +17,7 @@ class LevelHeader(Header):
         menu_button.rect.center = self.rect.center
         menu_button.rect.x = self.rect.x
 
-        self.__all_sprites__.add(menu_button)
+        self.__objects__.add(menu_button)
         super().__create_header__()
 
     def __on_click__(self) -> None:

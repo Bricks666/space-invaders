@@ -15,7 +15,7 @@ from .enemy_view import EnemyView
 @attach_views(AttachSpriteOptions(
     sprite_class=EnemyView,
     position_options=SpritePositionOptions(
-        scale=VectorLike(0.3, 0.3)
+        scale=VectorLike(0.8, 0.8)
     )
 ))
 class Enemy(GameObject):

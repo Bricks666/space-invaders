@@ -31,4 +31,4 @@ class RulesList(ScreenPart):
         move_left.rect.move_ip(0, -line_height)
         fire.rect.move_ip(0, line_height)
 
-        self.__all_sprites__.add(move_right, move_left, fire)
+        self.__objects__.add(move_right, move_left, fire)

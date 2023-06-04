@@ -38,4 +38,4 @@ class Header(ScreenPart):
         """
         header = Text(self.__text__, 0, 0, "large")
         header.rect.center = self.rect.center
-        self.__all_sprites__.add(header)
+        self.__objects__.add(header)

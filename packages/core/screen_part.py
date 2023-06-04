@@ -1,14 +1,14 @@
 from pygame import Rect, Surface, sprite
-from packages.core.game_object import Group
-from packages.core.types import DrawableLifecycleMethods
-from packages.core.script import Scriptable
+from .types import DrawableLifecycleMethods
+from .script import Scriptable
+from .game_object import Group, GameObject
 
 
 class ScreenPart(Scriptable, DrawableLifecycleMethods):
     """
     Абстрактный класс описывающий кусок текущего экрана
     """
-    __all_sprites__: Group[sprite.Sprite]
+    __objects__: Group[GameObject]
     """
     Все спрайты в данной части
     """
@@ -24,7 +24,7 @@ class ScreenPart(Scriptable, DrawableLifecycleMethods):
     def __init__(self, screen: Surface, rect: Rect) -> None:
         Scriptable.__init__(self)
         DrawableLifecycleMethods.__init__(self)
-        self.__all_sprites__ = Group[sprite.Sprite]()
+        self.__objects__ = Group[sprite.Sprite]()
         self.__screen__ = screen
         self.rect = rect
 
@@ -32,20 +32,20 @@ class ScreenPart(Scriptable, DrawableLifecycleMethods):
         """
         Метод для обновления спрайтов текущей части
         """
-        self.__all_sprites__.update(*args)
+        self.__objects__.update(*args)
 
     def draw(self, *args) -> None:
         """
         Метод для отрисовки спрайтов текущей части
         """
-        self.__all_sprites__.draw(self.__screen__, *args)
+        self.__objects__.draw(self.__screen__, *args)
 
     def activate(self, *args, **kwargs) -> None:
-        self.__all_sprites__.activate()
-        return super().activate(*args, **kwargs)
+        Scriptable.activate(self, *args, **kwargs)
+        self.__objects__.activate()
 
     def deactivate(self, *args, **kwargs) -> None:
-        self.__all_sprites__.deactivate()
+        self.__objects__.deactivate()
         """
         Очистка сцены после ее дезактивации
         """

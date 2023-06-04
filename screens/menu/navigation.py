@@ -46,4 +46,4 @@ class Navigation(ScreenPart):
         play.rect.move_ip(0, -SPRITE_SIZE * 0.5)
         exit.rect.move_ip(0, SPRITE_SIZE * 0.5)
 
-        self.__all_sprites__.add(play, exit, rules)
+        self.__objects__.add(play, exit, rules)

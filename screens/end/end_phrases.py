@@ -56,5 +56,5 @@ class EndPhrases(ScreenPart):
         max_score_text.rect.y += SPRITE_SIZE
         exit_text.rect.y += self.rect.bottom
 
-        self.__all_sprites__.add(
+        self.__objects__.add(
             max_score_text, score_text, end_text, exit_text)

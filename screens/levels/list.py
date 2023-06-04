@@ -37,7 +37,7 @@ class List(ScreenPart):
             level_sprites.add(self.__create_level_button__(
                 levels[i], i, level_row_count))
 
-        self.__all_sprites__.add(level_sprites)
+        self.__objects__.add(level_sprites)
         return super().activate(*args, **kwargs)
 
     def __create_level_button__(self, level: LevelModel, i: int, level_row_count: float) -> Button:

@@ -90,7 +90,7 @@ class Aside(ScreenPart):
         lives = []
         for i in range(lives_count):
             lives.append(Live(x(i), y))
-        self.__all_sprites__.add(lives)
+        self.__objects__.add(lives)
         self.__live_sprites__.add(lives)
 
     def __create_text__(self) -> None:
@@ -109,7 +109,7 @@ class Aside(ScreenPart):
         max_scores_text.rect.centerx = max_scores.rect.centerx = \
             scores_text.rect.centerx = scores.rect.centerx = self.rect.centerx
 
-        self.__all_sprites__.add(
+        self.__objects__.add(
             max_scores_text, max_scores, scores, scores_text)
 
     def __create_button__(self) -> None:
@@ -129,4 +129,4 @@ class Aside(ScreenPart):
         menu.rect.centerx = (left + center_y) / 2
         levels.rect.centerx = (right + center_y) / 2
 
-        self.__all_sprites__.add(menu, levels)
+        self.__objects__.add(menu, levels)

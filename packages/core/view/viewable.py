@@ -1,6 +1,6 @@
 from pygame import sprite, Surface
 from ..base.lifecycle import DrawableLifecycleMethods
-from ..math import AABB, AABBEvents
+from ..math import AABB
 from .sprite import *
 from .types import SpritePositionOptions
 
@@ -16,7 +16,10 @@ class Viewable(AABB, DrawableLifecycleMethods):
         self._sprites = sprite.Group()
         self._position_options_dict = {}
 
-        self.subscribe(AABBEvents.resize, self._reflow)
+    def update(self, *args, **kwargs) -> None:
+        if self._mutated:
+            self._reflow()
+        return super().update(*args, **kwargs)
 
     def draw(self, screen: Surface, *args, **kwargs):
         self._sprites.draw(screen, *args, **kwargs)
@@ -27,16 +30,16 @@ class Viewable(AABB, DrawableLifecycleMethods):
         return super().kill(*args, **kwargs)
 
     def _reflow(self):
-        print('reflow')
         for sprite in self._sprites:
             options = self._position_options_dict.get(sprite)
             if not options:
                 continue
-            scale, *_  = options
+
+            scale, *_ = options
 
             center = self.center_x, self.center_y
             sizes = scale.x * self.width, scale.y * self.height
-            sprite.rect.center = center
-            sprite.size = sizes
 
-            # sprite.rect.w = sizes.width
+            sprite.rect.center = center
+            sprite.rect.size = sizes
+        self._mutated = False

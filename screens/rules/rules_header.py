@@ -11,7 +11,7 @@ class RulesHeader(Header):
         menu = Button("Меню", 0, 0, self.__on_click__, "small")
         menu.rect.center = self.rect.center
         menu.rect.x = self.rect.x
-        self.__all_sprites__.add(menu)
+        self.__objects__.add(menu)
         return super().__create_header__()
 
     def __on_click__(self) -> None:
